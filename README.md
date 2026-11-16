@@ -1,166 +1,154 @@
 <div align="center">
-  <img src="screenshots/invidious_coverflow.png" width="900" alt="Invidious Edge Cinema 3D Cover Flow">
-  <h1>Invidious</h1>
+  <img src="screenshots/03_coverflow_drum.png" width="100%" alt="Dushin Invidious 3D Cover Flow Cinema">
+  <h1>Dushin Invidious</h1>
+  <p><b>Альтернативний клієнт із відкритим вихідним кодом для YouTube з 3D Cover Flow та режимом кінотеатру</b></p>
 
   <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">
     <img alt="License: AGPLv3" src="https://shields.io/badge/License-AGPL%20v3-blue.svg">
   </a>
-  <a href="https://github.com/iv-org/invidious/actions">
-    <img alt="Build Status" src="https://github.com/iv-org/invidious/workflows/Invidious%20CI/badge.svg">
-  </a>
-  <a href="https://github.com/iv-org/invidious/commits/master">
-    <img alt="GitHub commits" src="https://img.shields.io/github/commit-activity/y/iv-org/invidious?color=red&label=commits">
-  </a>
-  <a href="https://github.com/iv-org/invidious/issues">
-    <img alt="GitHub issues" src="https://img.shields.io/github/issues/iv-org/invidious?color=important">
-  </a>
-  <a href="https://github.com/iv-org/invidious/pulls">
-    <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/iv-org/invidious?color=blueviolet">
-  </a>
-  <a href="https://hosted.weblate.org/engage/invidious/">
-    <img alt="Translation Status" src="https://hosted.weblate.org/widgets/invidious/-/translations/svg-badge.svg">
-  </a>
-
-  <h3>An open source alternative front-end to YouTube</h3>
-
-  <a href="https://invidious.io/">Website</a>
-  &nbsp;•&nbsp;
-  <a href="https://instances.invidious.io/">Instances list</a>
-  &nbsp;•&nbsp;
-  <a href="https://docs.invidious.io/faq/">FAQ</a>
-  &nbsp;•&nbsp;
-  <a href="https://docs.invidious.io/">Documentation</a>
-  &nbsp;•&nbsp;
-  <a href="#contribute">Contribute</a>
-  &nbsp;•&nbsp;
-  <a href="https://invidious.io/donate/">Donate</a>
-
-  <h5>Chat with us:</h5>
-  <a href="https://matrix.to/#/#invidious:matrix.org">
-    <img alt="Matrix" src="https://img.shields.io/matrix/invidious:matrix.org?label=Matrix&color=darkgreen">
-  </a>
-  <a href="https://web.libera.chat/?channel=#invidious">
-    <img alt="Libera.chat (IRC)" src="https://img.shields.io/badge/IRC%20%28Libera.chat%29-%23invidious-darkgreen">
-  </a>
-  <br>
-  <a rel="me" href="https://social.tchncs.de/@invidious">
-  <img alt="Fediverse: @invidious@social.tchncs.de" src="https://img.shields.io/badge/Fediverse-%40invidious%40social.tchncs.de-darkgreen">
-  </a>
-  <br>
-  <a href="https://invidious.io/contact/">
-  <img alt="E-mail" src="https://img.shields.io/badge/E%2d%2dmail-darkgreen">
+  <a href="https://github.com/AndriyVeremchuck/invidious/commits/master">
+    <img alt="GitHub commits" src="https://img.shields.io/github/commit-activity/y/AndriyVeremchuck/invidious?color=red&label=commits">
   </a>
 </div>
 
+---
 
-## Screenshots
+## 📌 Про цей форк: що було змінено, додано та навіщо
 
-| Player                              | Preferences                         | Subscriptions                         |
-|-------------------------------------|-------------------------------------|---------------------------------------|
-| ![](screenshots/01_player.png)      | ![](screenshots/02_preferences.png) | ![](screenshots/03_subscriptions.png) |
-| ![](screenshots/04_description.png) | ![](screenshots/05_preferences.png) | ![](screenshots/06_subscriptions.png) |
+Цей проєкт є персональним форком офіційного [iv-org/invidious](https://github.com/iv-org/invidious).
 
+**Головна мета форку** — перетворити стандартний вебінтерфейс Invidious на ультрашвидку, візуально вишукану та безрекламну музичну відеостанцію формату **"розумне радіо" (Edge Cinema & Cover Flow)**, якою однаково зручно користуватися як на комп'ютері з клавіатури чи миші, так і на Smart TV з пульта або на смартфонах і планшетах Android.
 
-## Features
+### 🌟 Ключові зміни та нові можливості:
 
-**User features**
-- Lightweight
-- No ads
-- No tracking
-- No JavaScript required
-- Light/Dark themes
-- Customizable homepage
-- Subscriptions independent from Google
-- Notifications for all subscribed channels
-- Audio-only mode (with background play on mobile)
-- Support for YouTube comments
-- [Available in many languages](locales/), thanks to [our translators](#contribute)
+1. **3D Cover Flow барабан станцій**:
+   - Інтерактивне гортання карток станцій у тривимірному просторі з апаратним прискоренням GPU (`CSS 3D Transforms: translate3d, rotateY, scale, perspective`).
+   - Наближена відстань між картками, відсутність зайвих круглих кнопок та візуального сміття — чисті насичені постери з бейджем тривалості та неоновим підсвічуванням поточної пісні.
+2. **Edge Cinema Mode (Чистий кінотеатр)**:
+   - Відео розгортається на весь екран без банерів, коментарів, зайвих блоків та відволікаючих рекомендацій.
+   - Інтелектуальне автоприховування: якщо користувач не рухає курсор, інтерфейс автоматично плавно зникає через **1.65 с**, залишаючи тільки чисте відео. При вході курсору в центральну зону інтерфейс миттєво повертається.
+3. **Швидкісний паралельний пошук та безшовне фонове довантаження**:
+   - При введенні запиту система паралельно запитує перші 8 сторінок YouTube (160+ станцій), сортує їх за спаданням переглядів (найпопулярніші хіти завжди першими) та автоматично запускає трек №1.
+   - Фонове розширення (сторінки 9–25 та схожі радіо-мікси) непомітно додає до 350+ станцій у пам'ять без перезавантаження DOM і без найменшого блимання, перетасування чи зміщення поточних карток (`appendItems`).
+4. **Система вибраного (Favorites)**:
+   - Миттєве додавання пісні у вибране клавішами `Insert` або `+` / `=`.
+   - Видалення з вибраного клавішами `Delete` або `-`.
+   - Станції, які вже додані до вибраного, автоматично фільтруються із загального барабана пошуку, щоб не дублювати треки.
+5. **Професійна клавіатурна навігація**:
+   - `PageDown` / `PageUp` — миттєвий стрибок на 100 станцій вперед або назад.
+   - `Home` / `End` — швидкий перехід до найпершого або останнього треку списку.
+   - `ArrowLeft` / `ArrowRight` — плавний поворот барабана станцій з захистом від випадкового перескакування.
+   - Коліщатко миші з інтелектуальним накопичувачем імпульсу (аккумулятором).
+6. **Оптимізація під Android та великі екрани**:
+   - Автоматичне розпізнавання платформи Android (`.is-android`) зі зменшенням розміру шрифтів у картках на **30%** для компактного й гармонійного вигляду на смартфонах та емуляторах.
+   - Динамічне адаптивне масштабування під екрани будь-якої діагоналі (від 40" UltraWide / 4K TV до ноутбуків і смартфонів).
+7. **Повноцінний доступ через локальну мережу (IP)**:
+   - Сервіс прив'язаний до `0.0.0.0:3000`, що дозволяє транслювати музику та відкривати плеєр на будь-якому телефоні, планшеті чи домашньому телевізорі в одній мережі Wi-Fi.
 
-**Data import/export**
-- Import subscriptions from YouTube, NewPipe and FreeTube
-- Import watch history from YouTube and NewPipe
-- Export subscriptions to NewPipe and FreeTube
-- Import/Export Invidious user data
+---
 
-**Technical features**
-- Embedded video support
-- [Developer API](https://docs.invidious.io/api/)
-- Does not use official YouTube APIs
-- No Contributor License Agreement (CLA)
+## 📸 Скриншоти інтерфейсу
 
+### 1. Повноекранне відтворення відео (Pure Cinema Mode)
+> Чистий повноекранний перегляд без реклами, коментарів та сторонніх відволікань.
 
-## Quick start
+![Повноекранне відео](screenshots/01_cinema_video.png)
 
-**Using Invidious:**
+---
 
-- [Select a public instance from the list](https://instances.invidious.io) and start watching videos right now!
+### 2. Верхня панель пошуку та меню
+> Розумний Omnibox-пошук з автовиділенням тексту, фільтрами та миттєвим пошуком станцій.
 
-**Hosting Invidious:**
+![Пошук та меню](screenshots/02_search_menu.png)
 
-- [Follow the installation instructions](https://docs.invidious.io/installation/)
+---
 
+### 3. Інтерактивний 3D Cover Flow барабан карток
+> Преміальний 3D-карусельний барабан станцій із фізикою руху, лічильником композицій та акцентним центром.
 
-## Documentation
+![3D Cover Flow барабан](screenshots/03_coverflow_drum.png)
 
-The full documentation can be accessed online at https://docs.invidious.io/
+---
 
-The documentation's source code is available in this repository:
-https://github.com/iv-org/documentation
+## 🛠️ Стек технологій
 
-### Extensions
+У проєкті використано високоефективні сучасні інструменти з відкритим кодом:
 
-We highly recommend the use of [Privacy Redirect](https://github.com/SimonBrazell/privacy-redirect#get),
-a browser extension that automatically redirects YouTube URLs to any Invidious instance and replaces
-embedded YouTube videos on other websites with Invidious.
+- **[Crystal](https://crystal-lang.org/)** ([GitHub](https://github.com/crystal-lang/crystal)) — високоефективна скомпільована мова програмування нового покоління із синтаксисом Ruby та швидкістю виконання на рівні C/C++.
+- **[Kemal](https://kemalcr.com/)** ([GitHub](https://github.com/kemalcr/kemal)) — блискавичний, надлегкий вебфреймворк для Crystal, що забезпечує мікросекундну швидкість обробки HTTP-запитів.
+- **[Invidious Core & Companion](https://invidious.io/)** ([GitHub](https://github.com/iv-org/invidious)) — безпечний бекенд для взаємодії з медіапотоками без використання пропрієтарних API Google, реклами та систем стеження.
+- **[PostgreSQL](https://www.postgresql.org/)** ([GitHub](https://github.com/postgres/postgres)) — потужна реляційна база даних корпоративного рівня для надійного збереження підписок, історії та налаштувань.
+- **[Vanilla JavaScript & Modern CSS 3D](https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/rotateY)** — ядро інтерфейсу написане на чистому JavaScript без важких фреймворків; 3D-трансформації каруселі працюють через нативне апаратне прискорення відеокарти (GPU) для досягнення стабільних 60 FPS.
+- **[Docker & Docker Compose](https://www.docker.com/)** ([GitHub](https://github.com/docker/compose)) — ізольована контейнеризація для легкого розгортання та роботи на будь-якому сервері, ПК чи одноплатному комп'ютері (Raspberry Pi тощо).
 
-The documentation contains a list of browser extensions that we recommended to use along with Invidious.
+---
 
-You can read more here: https://docs.invidious.io/applications/
+## 🎯 Підсумок
 
+**Dushin Invidious** створений для тих, хто цінує свій час, приватність та естетику:
+- **Жодної реклами та стеження**: пряме відтворення аудіо та відео без трекерів Google.
+- **Естетика та кінематографічність**: плавний 3D Cover Flow барабан і автоприховування інтерфейсу повертають насолоду від перегляду та прослуховування музики.
+- **Швидкість**: моментальний пошук сотень станцій, відсортованих за якістю й популярністю.
+- **Універсальність**: однаковий комфорт при роботі з клавіатури ПК, пульта телевізора чи сенсорного екрана смартфона.
 
-## Contribute
+---
 
-### Code
+## 🚀 Як зібрати та запустити
 
-1.  Fork it ( https://github.com/iv-org/invidious/fork ).
-1.  Create your feature branch (`git checkout -b my-new-feature`).
-1.  Stage your files (`git add .`).
-1.  Commit your changes (`git commit -m 'Add some feature'`).
-1.  Push to the branch (`git push origin my-new-feature`).
-1.  Create a new pull request ( https://github.com/iv-org/invidious/compare ).
+### Вимоги:
+- Встановлені **[Docker](https://docs.docker.com/get-docker/)** та **[Docker Compose](https://docs.docker.com/compose/install/)**.
 
-### Translations
+### Покрокова інструкція:
 
-We use [Weblate](https://weblate.org) to manage Invidious translations.
+1. **Клонуйте репозиторій**:
+   ```bash
+   git clone https://github.com/AndriyVeremchuck/invidious.git
+   cd invidious
+   ```
 
-You can suggest new translations and/or correction here: https://hosted.weblate.org/engage/invidious/.
+2. **Запустіть сервіси через Docker Compose**:
+   ```bash
+   docker compose up -d
+   ```
+   *Команда автоматично завантажить потрібні образи (PostgreSQL, Companion, Invidious) та підніме сервіси у фоновому режимі.*
 
-Creating an account is not required, but recommended, especially if you want to contribute regularly.
-Weblate also allows you to log-in with major SSO providers like GitHub, GitLab, BitBucket, Google, ...
+3. **Перевірте стан контейнерів**:
+   ```bash
+   docker compose ps
+   ```
 
+4. **Відкрийте у браузері**:
+   - **На поточному комп'ютері**: [http://localhost:3000](http://localhost:3000)
+   - **З будь-якого пристрою у локальній Wi-Fi мережі** (телефон, планшет, Smart TV):  
+     `http://<ВАША_IP_АДРЕСА>:3000`  
+     *(наприклад: `http://192.168.1.103:3000`)*
 
-## Projects using Invidious
+---
 
-A list of projects and extensions for or utilizing Invidious can be found in the documentation: https://docs.invidious.io/applications/
+### 🔧 Корисні команди для керування:
 
-## Liability
+- **Переглянути логи в реальному часі**:
+  ```bash
+  docker compose logs -f invidious
+  ```
+- **Перезапустити проєкт**:
+  ```bash
+  docker compose restart
+  ```
+- **Зупинити роботу**:
+  ```bash
+  docker compose down
+  ```
+- **Оновити файли інтерфейсу після змін**:
+  ```bash
+  docker cp assets/js/edge_cinema.js invidious-invidious-1:/invidious/assets/js/edge_cinema.js
+  docker cp assets/css/default.css invidious-invidious-1:/invidious/assets/css/default.css
+  docker restart invidious-invidious-1
+  ```
 
-We take no responsibility for the use of our tool, or external instances
-provided by third parties. We strongly recommend you abide by the valid
-official regulations in your country. Furthermore, we refuse liability
-for any inappropriate use of Invidious, such as illegal downloading.
-This tool is provided to you in the spirit of free, open software.
+---
 
-You may view the LICENSE in which this software is provided to you [here](./LICENSE).
+## 📄 Ліцензія
 
->   16. Limitation of Liability.
->
-> IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
-WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS
-THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY
-GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE
-USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS OF
-DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD
-PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS),
-EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF
-SUCH DAMAGES.
+Цей проєкт поширюється за вільною ліцензією **GNU Affero General Public License v3.0 (AGPL-3.0)**.  
+Детальніше у файлі [LICENSE](./LICENSE).
