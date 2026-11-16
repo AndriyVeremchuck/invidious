@@ -120,6 +120,12 @@ dependencies_to_install.each do |dep|
       `mv #{download_path}/package/dist/#{js_path}#{dep}.js #{dest_path}/#{dep}.js`
     end
 
+    if dep_name == "video.js" && File.exists?("#{dest_path}/#{dep}.js")
+      vjs_code = File.read("#{dest_path}/#{dep}.js")
+      vjs_code = vjs_code.gsub("master.uri = uri;", "master.uri = uri; master.playlists = master.playlists || [];")
+      File.write("#{dest_path}/#{dep}.js", vjs_code)
+    end
+
     # Fetch CSS which isn't guaranteed to exist
     #
     # Also, video JS changes structure here once again...

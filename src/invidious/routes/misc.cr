@@ -2,30 +2,7 @@
 
 module Invidious::Routes::Misc
   def self.home(env)
-    preferences = env.get("preferences").as(Preferences)
-    locale = preferences.locale
-    user = env.get? "user"
-
-    case preferences.default_home
-    when "Popular"
-      env.redirect "/feed/popular"
-    when "Trending"
-      env.redirect "/feed/trending"
-    when "Subscriptions"
-      if user
-        env.redirect "/feed/subscriptions"
-      else
-        env.redirect "/feed/popular"
-      end
-    when "Playlists"
-      if user
-        env.redirect "/feed/playlists"
-      else
-        env.redirect "/feed/popular"
-      end
-    else
-      templated "search_homepage", navbar_search: false
-    end
+    env.redirect "/feed/trending"
   end
 
   def self.privacy(env)

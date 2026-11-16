@@ -1,7 +1,33 @@
+<%
+  clean_trending = trending.reject do |v|
+    if v.is_a?(SearchVideo)
+      v.live_now || v.upcoming? || (v.premiere_timestamp.try &.> Time.utc)
+    else
+      true
+    end
+  end
+
+  query_v = env.params.query["v"]?
+  query_q = env.params.query["q"]?
+
+  initial_item = if query_v && !query_v.empty?
+    clean_trending.find { |i| i.id == query_v }
+  else
+    nil
+  end
+  initial_item ||= clean_trending.first?
+
+  initial_id = (query_v && !query_v.empty?) ? query_v : (initial_item && initial_item.responds_to?(:id) ? initial_item.id : "")
+  initial_title = initial_item && initial_item.responds_to?(:title) ? initial_item.title : ""
+  autoplay_param = "0"
+%>
+
 <% content_for "header" do %>
 <meta name="description" content="<%= I18n.translate(locale, "An alternative front-end to YouTube") %>">
 <title>
-    <% if env.get("preferences").as(Preferences).default_home != "Trending" %>
+    <% if !initial_title.empty? %>
+        <%= HTML.escape(initial_title) %> - Invidious
+    <% elsif env.get("preferences").as(Preferences).default_home != "Trending" %>
         <%= I18n.translate(locale, "Trending") %> - Invidious
     <% else %>
         Invidious
@@ -9,41 +35,43 @@
 </title>
 <% end %>
 
-<%= rendered "components/feed_menu" %>
-
-<div class="pure-g h-box">
-    <div style="align-self:flex-end" class="pure-u-2-3">
-        <% if plid %>
-            <a href="/playlist?list=<%= plid %>">
-                <%= I18n.translate(locale, "View as playlist") %>
-            </a>
-        <% end %>
+<div class="edge-to-edge-app">
+    <!-- 1. FULLSCREEN VIDEO PLAYER (EDGE TO EDGE) -->
+    <div class="edge-player-section" id="player-container">
+        <iframe id="main-player-iframe"
+            tabindex="-1"
+            src="https://www.youtube-nocookie.com/embed/<%= initial_id %>?autoplay=<%= autoplay_param %>&enablejsapi=1&rel=0&origin=http://localhost:3000"
+            title="<%= HTML.escape(initial_title) %>"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen>
+        </iframe>
     </div>
-    <div class="pure-u-1-3">
-        <div class="pure-g" style="text-align:right">
-            <% {"Livestreams", "Gaming"}.each do |option| %>
-                <div class="pure-u-1 pure-md-1-3">
-                    <% if trending_type == option %>
-                        <b><%= I18n.translate(locale, option) %></b>
-                    <% else %>
-                        <a href="/feed/trending?type=<%= option %>&region=<%= region %>">
-                            <%= I18n.translate(locale, option) %>
-                        </a>
-                    <% end %>
-                </div>
+
+    <!-- 2. TOP CARDS COUNTER (Відео знайдено: X / Y) -->
+    <div class="top-cards-counter" id="top-cards-counter">
+        <span class="cards-count-label">Відео знайдено: <span id="cards-count-num"><b><%= clean_trending.size %></b></span></span>
+    </div>
+
+    <!-- 3. 3D DRUM CAROUSEL FLOATING OVER PLAYER (CENTERED) -->
+    <div class="edge-cards-bar" id="cards-bar-container">
+        <!-- 3D Drum Stage: 7 Symmetrical Slots [-3, -2, -1, 0, 1, 2, 3] -->
+        <div id="edge-cards-drum" class="cards-drum-stage" tabindex="0"></div>
+
+        <!-- Initial server-rendered cards data -->
+        <div id="initial-cards-data" style="display:none;">
+            <% clean_trending.each do |item| %>
+                <%= rendered "components/item" %>
             <% end %>
         </div>
     </div>
+
+    <!-- 4. BOTTOM BAR: Only Song Title and Author -->
+    <div class="bottom-now-playing-bar" id="bottom-now-playing-bar">
+        <span id="drum-now-playing-title" class="drum-playing-title"></span>
+    </div>
 </div>
 
-<div class="h-box">
-    <hr>
-</div>
-
-<div class="pure-g">
-<% trending.each do |item| %>
-    <%= rendered "components/item" %>
-<% end %>
-</div>
-
+<script src="https://www.youtube.com/iframe_api"></script>
+<script src="/js/edge_cinema.js?v=<%= ASSET_COMMIT %>"></script>
 <script src="/js/watched_indicator.js"></script>

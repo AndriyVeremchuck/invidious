@@ -21,8 +21,10 @@ module Invidious::Routes::Watch
       unless validate_video_id(id)
         return Errors.error_template(400, InvalidVideoID.new(id))
       end
+
+      return env.redirect "/feed/trending?v=#{id}"
     else
-      return env.redirect "/"
+      return env.redirect "/feed/trending"
     end
 
     plid = env.params.query["list"]?.try &.gsub(/[^a-zA-Z0-9_-]/, "")

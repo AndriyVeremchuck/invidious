@@ -254,15 +254,21 @@ div.thumbnail > .bottom-right-overlay {
 .bottom-right-overlay { bottom: 0.6em; right: 0.6em; }
 
 .length {
-  padding: 1px;
-  margin: -2px 0;
-  color: #fff;
-  border-radius: 3px;
+  padding: 3px 8px;
+  margin: 0;
+  color: #ffffff !important;
+  background-color: rgba(0, 0, 0, 0.8) !important;
+  backdrop-filter: blur(4px);
+  border-radius: 6px;
+  font-size: 0.82em;
+  font-weight: 600;
+  letter-spacing: 0.3px;
 }
 
-.length, .top-left-overlay button {
+.top-left-overlay button {
   color: #eee;
   background-color: rgba(35, 35, 35, 0.85) !important;
+  border-radius: 6px;
 }
 
 
@@ -289,6 +295,1164 @@ div.thumbnail > .bottom-right-overlay {
   padding: 0; /* this way it will stay aligned with content under */
 }
 
+body,
+body.no-theme,
+body.light-theme {
+  background-color: #f1f3f7;
+  color: #1e293b;
+}
+
+.navbar .navbar-feed-btn,
+.navbar .navbar-filters-btn {
+  background: #e2e8f0;
+  color: #334155;
+  font-size: 0.88em;
+  padding: 6px 14px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-weight: 600;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #cbd5e1;
+  transition: all 0.18s ease;
+}
+
+.navbar .navbar-feed-btn:hover,
+.navbar .navbar-filters-btn:hover {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+.dark-theme .navbar .navbar-feed-btn,
+.dark-theme .navbar .navbar-filters-btn {
+  background: #21262d;
+  color: #c9d1d9;
+  border: 1px solid #30363d;
+}
+
+.dark-theme .navbar .navbar-feed-btn:hover,
+.dark-theme .navbar .navbar-filters-btn:hover {
+  background: #3b82f6;
+  color: #ffffff;
+  border-color: #3b82f6;
+  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
+}
+
+/* Hide duplicate feed-menu tabs */
+.feed-menu {
+  display: none !important;
+}
+
+#filters-collapse summary {
+  display: none !important;
+}
+
+#filters-box {
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin: 12px auto;
+  max-width: 1400px;
+}
+
+.light-theme #filters-box,
+.no-theme #filters-box {
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+}
+
+.dark-theme #filters-box {
+  background: #161b22;
+  border: 1.5px solid #30363d;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* Video cards styling - highlighted, elevated, modern */
+.video-card-wrapper {
+  padding: 4px;
+  box-sizing: border-box;
+  display: flex;
+  cursor: pointer;
+}
+
+.video-card-box {
+  width: 100%;
+  border-radius: 12px;
+  padding: 6px !important;
+  margin: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  gap: 2px;
+  cursor: pointer;
+}
+
+.video-card-box .thumbnail {
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  background-color: #000;
+  margin-bottom: 4px;
+}
+
+.video-card-box .thumbnail img {
+  border-radius: 8px;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  transition: transform 0.25s ease;
+}
+
+.video-card-box:hover .thumbnail img {
+  transform: scale(1.02);
+}
+
+.video-card-box .video-title-row {
+  height: 2.6em;
+  min-height: 2.6em;
+  max-height: 2.6em;
+  margin: 2px 0;
+  overflow: hidden;
+}
+
+.video-card-box .video-title-row p {
+  margin: 0;
+  padding: 0;
+  font-size: 0.82em;
+  font-weight: 600;
+  line-height: 1.3;
+  color: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.video-card-box .video-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 2px 0 0 0;
+  font-size: 0.76em;
+  line-height: 1.2;
+  gap: 6px;
+  min-height: 1.4em;
+}
+
+.video-card-box .channel-name-container {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.video-card-box .channel-name {
+  font-weight: 500;
+  opacity: 0.85;
+  margin: 0;
+}
+
+.video-card-box .views-count-container {
+  flex: 0 0 auto;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.video-card-box .views-count {
+  font-weight: 600;
+  opacity: 0.85;
+  margin: 0;
+}
+
+.video-card-box .views-count.live-tag {
+  color: #ef4444;
+  font-weight: bold;
+}
+
+.video-card-box a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.video-card-box a:hover {
+  text-decoration: none;
+}
+
+.light-theme .video-card-box,
+.no-theme .video-card-box {
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
+}
+
+.light-theme .video-card-box:hover,
+.no-theme .video-card-box:hover {
+  transform: translateY(-5px);
+  border-color: #2563eb;
+  box-shadow: 0 14px 28px rgba(37, 99, 235, 0.2);
+}
+
+.dark-theme .video-card-box {
+  background: #161b22;
+  border: 1.5px solid #30363d;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+.dark-theme .video-card-box:hover {
+  transform: translateY(-5px);
+  background: #1c2128;
+  border-color: #3b82f6;
+  box-shadow: 0 14px 30px rgba(59, 130, 246, 0.25);
+}
+
+/* Sticky permanent navbar (Floating HUD) - flush against top Chrome window */
+.navbar {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) scale(1) !important;
+  width: 90% !important;
+  max-width: 1060px !important;
+  height: 110px !important;
+  min-height: 110px !important;
+  max-height: 110px !important;
+  padding: 12px 26px !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 1000 !important;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease !important;
+  background: rgba(13, 17, 23, 0.70) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 60px !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75), 0 0 35px rgba(59, 130, 246, 0.20) !important;
+}
+
+.navbar-left {
+  display: none !important;
+}
+
+.navbar-center {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 100% !important;
+}
+
+.navbar-right {
+  display: none !important;
+}
+
+.navbar .searchbar-inner,
+.navbar form.pure-form {
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: relative !important;
+}
+
+.navbar form.pure-form fieldset {
+  flex: 1 1 auto !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.navbar #searchbox {
+  width: 100% !important;
+  height: 88px !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  font-size: 2.65em !important;
+  font-weight: 500 !important;
+  color: #ffffff !important;
+  padding: 0 20px !important;
+}
+
+.navbar #searchbutton {
+  flex: 0 0 82px !important;
+  width: 82px !important;
+  height: 82px !important;
+  border-radius: 50% !important;
+  background: #2563eb !important;
+  border: none !important;
+  color: #ffffff !important;
+  font-size: 36px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  transition: background 0.15s ease, transform 0.15s ease !important;
+}
+  flex: 0 0 160px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 16px !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.navbar-right a,
+.navbar-right .pure-menu-heading,
+.navbar-right div,
+.navbar-right .pure-u-1-3,
+.navbar-right .pure-u-1-4 {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: auto !important;
+  height: 100% !important;
+  line-height: 1 !important;
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+.navbar-right i.icon {
+  font-size: 19px !important;
+  line-height: 1 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Edge-to-Edge Layout */
+.edge-to-edge-app {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+/* 1. Fullscreen Video Player */
+.edge-player-section {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: #000000 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  z-index: 1 !important;
+}
+
+.edge-player-section iframe {
+  width: 100% !important;
+  height: 100% !important;
+  border: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+/* 1. Top Cards Counter (Відео знайдено: X / Y) - Pinned at top of window */
+.top-cards-counter {
+  position: fixed !important;
+  top: 22px !important;
+  left: 50% !important;
+  transform: translateX(-50%) scale(1) !important;
+  background: rgba(13, 17, 23, 0.72) !important;
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 30px !important;
+  padding: 8px 24px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  font-size: 1.25em !important;
+  box-sizing: border-box !important;
+  pointer-events: auto !important;
+  z-index: 501 !important;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65) !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95) !important;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease !important;
+}
+
+.cards-count-label {
+  opacity: 0.95 !important;
+  font-weight: 600 !important;
+  color: #f1f5f9 !important;
+  white-space: nowrap !important;
+}
+
+.cards-count-label b {
+  color: #60a5fa !important;
+  font-weight: 800 !important;
+}
+
+/* 2. Bottom Now Playing Bar (Лише пісня та автор з великим шрифтом) */
+.bottom-now-playing-bar {
+  position: fixed !important;
+  bottom: 22px !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 42px !important;
+  padding: 0 32px !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  box-sizing: border-box !important;
+  pointer-events: auto !important;
+  z-index: 501 !important;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease !important;
+}
+
+.drum-playing-title {
+  color: #ffffff !important;
+  font-size: 1.55em !important;
+  font-weight: 600 !important;
+  max-width: 82vw !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.98), 0 0 32px rgba(0, 0, 0, 0.95) !important;
+  letter-spacing: 0.3px !important;
+}
+
+/* 3. Edge-to-Edge Floating Cards Drum (Centered in Middle of Screen) */
+.edge-cards-bar {
+  position: fixed !important;
+  top: 50% !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: unset !important;
+  max-height: unset !important;
+  transform: translateY(-50%) scale(1) !important;
+  box-sizing: border-box !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  z-index: 500 !important;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease !important;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  pointer-events: none !important;
+}
+
+/* Independent Focus & Mutual Exclusion of Panels (Fade In/Out Without Sliding) */
+#contents.autohide-all .navbar,
+#contents.focus-bottom .navbar {
+  transform: translate(-50%, -50%) scale(0.96) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+#contents.autohide-all .edge-cards-bar,
+#contents.focus-top .edge-cards-bar {
+  transform: translateY(-50%) scale(0.96) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+#contents.autohide-all .top-cards-counter,
+#contents.focus-top .top-cards-counter {
+  transform: translate(-50%, -14px) scale(0.96) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+#contents.autohide-all .bottom-now-playing-bar,
+#contents.focus-top .bottom-now-playing-bar {
+  transform: translateY(14px) scale(0.96) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+#contents.focus-top .navbar {
+  transform: translate(-50%, -50%) scale(1) !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+#contents.focus-bottom .edge-cards-bar {
+  transform: translateY(-50%) scale(1) !important;
+  opacity: 1 !important;
+  pointer-events: none !important;
+}
+#contents.focus-bottom .top-cards-counter {
+  transform: translate(-50%, 0) scale(1) !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+#contents.focus-bottom .bottom-now-playing-bar {
+  transform: translateY(0) scale(1) !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* 3D Drum Carousel Stage (Барабан з карток по середині екрана) */
+.cards-drum-stage {
+  width: 100% !important;
+  max-width: 98vw !important;
+  height: clamp(480px, 48vh, 680px) !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  position: relative !important;
+  perspective: 2000px !important;
+  perspective-origin: 50% 50% !important;
+  transform-style: preserve-3d !important;
+  margin: 0 auto !important;
+  overflow: visible !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  pointer-events: auto !important;
+}
+
+.cards-drum-stage,
+.cards-drum-stage:focus,
+.cards-drum-stage:focus-visible,
+.cards-drum-stage:focus-within,
+.drum-card-slot,
+.drum-card-slot:focus,
+.drum-card-slot:focus-visible {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Card Slot: 3D Animated Cover Flow Card (+30% larger) */
+.drum-card-slot {
+  position: absolute !important;
+  width: clamp(570px, 38vw, 880px) !important;
+  height: clamp(350px, 43vh, 530px) !important;
+  cursor: pointer !important;
+  outline: none !important;
+  transform-style: preserve-3d !important;
+  transition: transform 0.48s cubic-bezier(0.16, 1, 0.3, 1), 
+              opacity 0.38s ease, 
+              filter 0.38s ease,
+              visibility 0.38s ease !important;
+  will-change: transform, opacity !important;
+  pointer-events: auto !important;
+}
+
+.drum-card-slot .video-card-box {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 18px !important;
+  padding: 2px !important; /* Рівно 2 пікселі відстань від контуру картки до картинки */
+  box-sizing: border-box !important;
+  display: block !important;
+  position: relative !important;
+  background: rgba(18, 22, 30, 0.85) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.10) !important;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.80) !important;
+  outline: none !important;
+  overflow: hidden !important;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+.drum-card-slot .thumbnail-container {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 16px !important; /* Закруглені кути картинки */
+  overflow: hidden !important;
+  position: relative !important;
+  background: #000000 !important;
+}
+
+.drum-card-slot .thumbnail-img {
+  border-radius: 16px !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  filter: saturate(1.18) contrast(1.06) brightness(1.02) !important;
+  image-rendering: -webkit-optimize-contrast !important;
+  opacity: 0;
+  transition: opacity 0.3s ease, filter 0.35s ease, transform 0.35s ease !important;
+}
+
+.drum-card-slot .thumbnail-img.is-loaded {
+  opacity: 1 !important;
+}
+
+.drum-card-slot .thumbnail-duration {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  background-color: rgba(0, 0, 0, 0.85) !important;
+  color: #ffffff !important;
+  border-radius: 8px !important;
+  padding: 4px 10px !important;
+  font-size: 0.95em !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.5px !important;
+  z-index: 5 !important;
+  pointer-events: none !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.75) !important;
+}
+
+/* Назва відео поверх картинки як і час (БЕЗ ЖОДНИХ ЗНАЧКІВ 'ВИБРАНО' АБО 'ГРАЄ') */
+.drum-card-slot .thumbnail-title-overlay {
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  padding: 38px 18px 14px 18px !important;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.72) 65%, transparent 100%) !important;
+  border-bottom-left-radius: 16px !important;
+  border-bottom-right-radius: 16px !important;
+  z-index: 4 !important;
+  pointer-events: none !important;
+  box-sizing: border-box !important;
+}
+
+.drum-card-slot .thumbnail-title-overlay p {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 1.10em !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+  color: #ffffff !important;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.98) !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.drum-card-slot .thumbnail-meta-sub {
+  font-size: 0.88em !important;
+  opacity: 0.90 !important;
+  margin-top: 4px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  color: #cbd5e1 !important;
+}
+
+/* =========================================================================
+   Android Font Scaling (-30% in drum cards for Android devices/emulators)
+   ========================================================================= */
+.is-android .drum-card-slot .thumbnail-title-overlay {
+  padding: 24px 12px 10px 12px !important;
+}
+
+.is-android .drum-card-slot .thumbnail-title-overlay p {
+  font-size: 0.77em !important; /* 1.10em * 0.70 = 0.77em (-30%) */
+  line-height: 1.25 !important;
+}
+
+.is-android .drum-card-slot .thumbnail-meta-sub {
+  font-size: 0.62em !important; /* 0.88em * 0.70 = 0.62em (-30%) */
+  margin-top: 2px !important;
+}
+
+.is-android .drum-card-slot .thumbnail-duration {
+  font-size: 0.67em !important; /* 0.95em * 0.70 = 0.67em (-30%) */
+  padding: 3px 7px !important;
+  top: 7px !important;
+  right: 7px !important;
+}
+
+/* Center Card: Slot 0 (Currently Playing / Center of Drum) */
+.drum-card-slot.slot-center {
+  filter: brightness(1.10) saturate(1.22) !important;
+}
+.drum-card-slot.slot-center .video-card-box {
+  border: 2.5px solid #ef4444 !important;
+  box-shadow: 0 0 50px rgba(239, 68, 68, 0.85), 0 25px 60px rgba(0, 0, 0, 0.95) !important;
+}
+.drum-card-slot.slot-center .thumbnail-img {
+  filter: saturate(1.25) contrast(1.08) brightness(1.05) !important;
+}
+
+.drum-card-slot:hover {
+  opacity: 1 !important;
+  filter: brightness(1.15) saturate(1.20) !important;
+}
+
+/* Empty Favorite Card (Велика порожня картка для другого барабана) */
+.drum-card-slot .empty-fav-card-box {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 18px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(18, 22, 30, 0.88) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 2px dashed rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85) !important;
+  text-align: center !important;
+  padding: 30px !important;
+  box-sizing: border-box !important;
+  cursor: default !important;
+}
+.empty-fav-icon {
+  font-size: 3.8em !important;
+  margin-bottom: 16px !important;
+  filter: drop-shadow(0 0 20px rgba(234, 179, 8, 0.6)) !important;
+}
+.empty-fav-title {
+  font-size: 1.85em !important;
+  font-weight: 700 !important;
+  color: #f8fafc !important;
+  margin-bottom: 10px !important;
+  letter-spacing: 0.5px !important;
+}
+.empty-fav-sub {
+  font-size: 1.25em !important;
+  color: #94a3b8 !important;
+  max-width: 80% !important;
+  line-height: 1.4 !important;
+}
+.empty-fav-sub b {
+  color: #60a5fa !important;
+}
+
+/* Keyframe animations for icon and cards vertical transition */
+@keyframes iconFlyUpOut {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-135%);
+    opacity: 0;
+  }
+}
+
+@keyframes iconFlyUpIn {
+  0% {
+    transform: translateY(135%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Floating Bottom-Right Favorite Button (Прибрано за запитом користувача) */
+.floating-fav-btn {
+  display: none !important;
+}
+
+/* Card Favorite Button (Прибрано за запитом користувача) */
+.drum-card-slot .card-fav-btn {
+  display: none !important;
+}
+
+/* ========================================================== */
+/* RESPONSIVE MULTI-DEVICE SUPPORT: MSI 40", 4K TV, TABLETS, PHONES */
+/* ========================================================== */
+
+/* A. MSI 40" / UltraWide (3440x1440, 5120x2160) / 4K / TV */
+@media (min-width: 2560px), (min-height: 1400px) {
+  .navbar {
+    max-width: 1520px !important;
+    height: 152px !important;
+    min-height: 152px !important;
+    max-height: 152px !important;
+    border-radius: 76px !important;
+    padding: 16px 38px !important;
+  }
+  .navbar #searchbox {
+    font-size: 3.60em !important;
+    height: 126px !important;
+  }
+  .navbar #searchbutton {
+    flex: 0 0 108px !important;
+    width: 108px !important;
+    height: 108px !important;
+    font-size: 48px !important;
+  }
+  .top-cards-counter {
+    top: 36px !important;
+    font-size: 2.1em !important;
+    padding: 14px 42px !important;
+    border-radius: 44px !important;
+  }
+  .bottom-now-playing-bar {
+    bottom: 36px !important;
+  }
+  .drum-playing-title {
+    font-size: 2.6em !important;
+    max-width: 86vw !important;
+  }
+  .cards-drum-stage {
+    height: clamp(680px, 68vh, 990px) !important;
+    perspective: 3000px !important;
+  }
+  .drum-card-slot {
+    width: clamp(860px, 34.5vw, 1280px) !important;
+    height: clamp(520px, 47vh, 770px) !important;
+  }
+  .drum-card-slot .thumbnail-duration {
+    font-size: 1.50em !important;
+    padding: 8px 18px !important;
+    border-radius: 14px !important;
+    top: 22px !important;
+    right: 22px !important;
+  }
+  .drum-card-slot .thumbnail-title-overlay {
+    padding: 65px 32px 28px 32px !important;
+  }
+  .drum-card-slot .thumbnail-title-overlay p {
+    font-size: 2.10em !important;
+    line-height: 1.35 !important;
+  }
+  .drum-card-slot .thumbnail-meta-sub {
+    font-size: 1.55em !important;
+    margin-top: 10px !important;
+  }
+  .is-android .drum-card-slot .thumbnail-title-overlay {
+    padding: 42px 22px 18px 22px !important;
+  }
+  .is-android .drum-card-slot .thumbnail-title-overlay p {
+    font-size: 1.47em !important; /* 2.10em * 0.70 */
+    line-height: 1.28 !important;
+  }
+  .is-android .drum-card-slot .thumbnail-meta-sub {
+    font-size: 1.08em !important; /* 1.55em * 0.70 */
+    margin-top: 6px !important;
+  }
+  .is-android .drum-card-slot .thumbnail-duration {
+    font-size: 1.05em !important; /* 1.50em * 0.70 */
+    padding: 5px 12px !important;
+  }
+
+  .empty-fav-icon {
+    font-size: 5.0em !important;
+  }
+  .empty-fav-title {
+    font-size: 2.5em !important;
+  }
+  .empty-fav-sub {
+    font-size: 1.6em !important;
+  }
+}
+
+/* B. Tablets & Mid-size displays (768px - 1279px) */
+@media (min-width: 768px) and (max-width: 1279px) {
+  .navbar {
+    max-width: 740px !important;
+    height: 82px !important;
+    min-height: 82px !important;
+    max-height: 82px !important;
+  }
+  .navbar #searchbox {
+    font-size: 1.90em !important;
+    height: 64px !important;
+  }
+  .navbar #searchbutton {
+    flex: 0 0 60px !important;
+    width: 60px !important;
+    height: 60px !important;
+    font-size: 28px !important;
+  }
+  .top-cards-counter {
+    top: 18px !important;
+    font-size: 1.2em !important;
+    padding: 7px 22px !important;
+  }
+  .bottom-now-playing-bar {
+    bottom: 18px !important;
+  }
+  .drum-playing-title {
+    font-size: 1.45em !important;
+  }
+  .cards-drum-stage {
+    height: clamp(280px, 38vh, 400px) !important;
+    perspective: 1400px !important;
+  }
+  .drum-card-slot {
+    width: clamp(340px, 40vw, 480px) !important;
+    height: clamp(210px, 26vh, 295px) !important;
+  }
+  .drum-card-slot .thumbnail-title-overlay p {
+    font-size: 1.05em !important;
+  }
+  .drum-card-slot .thumbnail-meta-sub {
+    font-size: 0.88em !important;
+  }
+  .is-android .drum-card-slot .thumbnail-title-overlay p {
+    font-size: 0.73em !important; /* 1.05em * 0.70 */
+  }
+  .is-android .drum-card-slot .thumbnail-meta-sub {
+    font-size: 0.61em !important; /* 0.88em * 0.70 */
+  }
+  .is-android .drum-card-slot .thumbnail-duration {
+    font-size: 0.66em !important;
+  }
+}
+
+/* C. Phones / Mobile devices (< 768px) */
+@media (max-width: 767px) {
+  .navbar {
+    width: 94vw !important;
+    max-width: 96vw !important;
+    height: 68px !important;
+    min-height: 68px !important;
+    max-height: 68px !important;
+    padding: 6px 14px !important;
+    border-radius: 36px !important;
+  }
+  .navbar #searchbox {
+    font-size: 1.45em !important;
+    height: 52px !important;
+    padding: 0 10px !important;
+  }
+  .navbar #searchbutton {
+    flex: 0 0 50px !important;
+    width: 50px !important;
+    height: 50px !important;
+    font-size: 22px !important;
+  }
+  .top-cards-counter {
+    top: 12px !important;
+    font-size: 0.95em !important;
+    padding: 5px 16px !important;
+    border-radius: 20px !important;
+  }
+  .bottom-now-playing-bar {
+    bottom: 44px !important;
+    padding: 0 12px !important;
+  }
+  .drum-playing-title {
+    font-size: 1.15em !important;
+    max-width: 95vw !important;
+  }
+  .cards-drum-stage {
+    height: clamp(240px, 36vh, 310px) !important;
+    perspective: 1100px !important;
+  }
+  .drum-card-slot {
+    width: clamp(280px, 82vw, 360px) !important;
+    height: clamp(175px, 28vh, 225px) !important;
+  }
+  .drum-card-slot .thumbnail-duration {
+    font-size: 0.82em !important;
+    padding: 3px 7px !important;
+    top: 6px !important;
+    right: 6px !important;
+  }
+  .drum-card-slot .thumbnail-title-overlay {
+    padding: 26px 12px 10px 12px !important;
+  }
+  .drum-card-slot .thumbnail-title-overlay p {
+    font-size: 0.92em !important;
+    -webkit-line-clamp: 1 !important;
+  }
+  .drum-card-slot .thumbnail-meta-sub {
+    display: none !important;
+  }
+  .is-android .drum-card-slot .thumbnail-title-overlay p {
+    font-size: 0.64em !important; /* 0.92em * 0.70 */
+  }
+  .is-android .drum-card-slot .thumbnail-duration {
+    font-size: 0.57em !important; /* 0.82em * 0.70 */
+  }
+}
+
+/* Floating Cinema UI Toggle Button (Always on Left) */
+.cinema-toggle-btn {
+  position: fixed !important;
+  top: 8px !important;
+  left: 12px !important;
+  right: auto !important;
+  z-index: 100000 !important;
+  padding: 5px 12px !important;
+  border-radius: 20px !important;
+  background: rgba(13, 17, 23, 0.85) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
+  transition: all 0.2s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  user-select: none !important;
+}
+.cinema-toggle-btn:hover {
+  background: #2563eb !important;
+  border-color: #60a5fa !important;
+  transform: scale(1.05) !important;
+}
+
+/* Active Playing Card Style */
+.video-card-box.now-playing {
+  border: 2.5px solid #ef4444 !important;
+  box-shadow: 0 0 0 2px #ef4444, 0 0 24px rgba(239, 68, 68, 0.85) !important;
+}
+
+/* Keyboard Cursor Navigation Focus States */
+.video-card-wrapper:focus,
+.video-card-wrapper.keyboard-focused .video-card-box {
+  outline: none !important;
+  border: 2.5px solid #38bdf8 !important;
+  box-shadow: 0 0 0 3px #38bdf8, 0 0 28px rgba(56, 189, 248, 0.95) !important;
+  transform: translateY(-4px) scale(1.04) !important;
+}
+
+.edge-cards-scroll-track {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 156px !important;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  gap: 12px !important;
+  overflow-x: scroll !important;
+  overflow-y: hidden !important;
+  padding: 4px 16px 8px 16px !important;
+  margin-bottom: 8px !important;
+  box-sizing: border-box !important;
+  cursor: grab !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: #3b82f6 rgba(255, 255, 255, 0.08) !important;
+  background: transparent !important;
+}
+
+.edge-cards-scroll-track.active-dragging {
+  cursor: grabbing !important;
+  cursor: -webkit-grabbing !important;
+}
+
+.edge-cards-scroll-track::-webkit-scrollbar {
+  height: 6px !important;
+  background: transparent !important;
+}
+
+.edge-cards-scroll-track::-webkit-scrollbar-track,
+.edge-cards-scroll-track::-webkit-scrollbar-track-piece {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-radius: 3px !important;
+}
+
+.dark-theme .edge-cards-scroll-track::-webkit-scrollbar-track,
+.dark-theme .edge-cards-scroll-track::-webkit-scrollbar-track-piece {
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+.edge-cards-scroll-track::-webkit-scrollbar-thumb {
+  background: #3b82f6 !important;
+  border-radius: 3px !important;
+}
+
+.edge-cards-scroll-track > .video-card-wrapper {
+  flex: 0 0 210px !important;
+  width: 210px !important;
+  min-width: 210px !important;
+  max-width: 210px !important;
+  height: 148px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.edge-cards-scroll-track .video-card-box {
+  width: 100% !important;
+  height: 100% !important;
+  padding: 4px !important;
+  border-radius: 8px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  gap: 2px !important;
+}
+
+.edge-cards-scroll-track .thumbnail {
+  margin-bottom: 2px !important;
+  border-radius: 6px !important;
+}
+
+.edge-cards-scroll-track .thumbnail img {
+  border-radius: 6px !important;
+  aspect-ratio: 16/9 !important;
+  height: 85px !important;
+  object-fit: cover !important;
+}
+
+.edge-cards-scroll-track .video-title-row {
+  height: 2.4em !important;
+  min-height: 2.4em !important;
+  max-height: 2.4em !important;
+  margin: 1px 0 !important;
+}
+
+.edge-cards-scroll-track .video-title-row p {
+  font-size: 0.74em !important;
+  line-height: 1.2 !important;
+}
+
+.edge-cards-scroll-track .video-meta-row {
+  margin: 0 !important;
+  font-size: 0.7em !important;
+  min-height: 1.2em !important;
+}
+
+.edge-nav-arrow {
+  display: none !important;
+}
+
+.video-card-box.now-playing {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 2px #ef4444, 0 8px 24px rgba(239, 68, 68, 0.25) !important;
+}
+
 .navbar .index-link {
   font-weight: bold;
   display: inline;
@@ -296,32 +1460,57 @@ div.thumbnail > .bottom-right-overlay {
 
 .searchbar .pure-form {
   display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
 }
 
 .searchbar .pure-form fieldset {
   padding: 0;
+  margin: 0;
   flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .searchbar input[type="search"] {
-	width: 100%;
-	margin: 1px;
-
-	border: 1px solid;
-	border-color: rgba(0,0,0,0);
-	border-bottom-color: #CCC;
-	border-radius: 0;
-
-	box-shadow: none;
-	appearance: none;
-	-webkit-appearance: none;
+  width: 100%;
+  padding: 7px 38px 7px 16px;
+  border-radius: 24px !important;
+  font-size: 0.95em;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+  appearance: none;
+  -webkit-appearance: none;
 }
 
-.searchbar input[type="search"]:focus {
-	margin: 0;
-	border: 2px solid;
-	border-color: rgba(0,0,0,0);
-	border-bottom-color: #FED;
+.light-theme .searchbar input[type="search"],
+.no-theme .searchbar input[type="search"] {
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  color: #1e293b;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.light-theme .searchbar input[type="search"]:focus,
+.no-theme .searchbar input[type="search"]:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  background: #ffffff;
+  outline: none;
+}
+
+.dark-theme .searchbar input[type="search"] {
+  background: #0d1117;
+  border: 1.5px solid #30363d;
+  color: #f0f6fc;
+}
+
+.dark-theme .searchbar input[type="search"]:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+  outline: none;
 }
 
 /* https://stackoverflow.com/a/55170420 */
@@ -334,13 +1523,32 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 .searchbar #searchbutton {
+  position: absolute;
+  right: 6px;
   border: none;
   background: none;
-  margin-top: 0;
+  margin: 0;
+  padding: 6px 10px;
+  cursor: pointer;
+  color: #64748b;
+  font-size: 1.1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s ease;
+  z-index: 2;
 }
 
 .searchbar #searchbutton:hover {
-  color: rgb(0, 182, 240);
+  color: #2563eb;
+}
+
+.dark-theme .searchbar #searchbutton {
+  color: #8b949e;
+}
+
+.dark-theme .searchbar #searchbutton:hover {
+  color: #3b82f6;
 }
 
 .user-field {
@@ -366,10 +1574,6 @@ input[type="search"]::-webkit-search-cancel-button {
 @media only screen and (max-aspect-ratio: 16/9) {
   .player-dimensions.vjs-fluid {
     padding-top: 46.86% !important;
-  }
-
-  #player-container {
-    padding-bottom: 46.86% !important;
   }
 }
 
@@ -417,7 +1621,7 @@ input[type="search"]::-webkit-search-cancel-button {
  * Video "cards" (results/playlist/channel videos)
  */
 
-.video-card-row { margin: 15px 0; }
+.video-card-row { margin: 2px 0; }
 
 p.channel-name { margin: 0; overflow-wrap: anywhere;}
 p.video-data   { margin: 0; font-weight: bold; font-size: 80%; }
@@ -667,8 +1871,8 @@ span > select {
 }
 
 body.dark-theme {
-  background-color: rgba(35, 35, 35, 1);
-  color: #f0f0f0;
+  background-color: #0f1117;
+  color: #f0f6fc;
 }
 
 .dark-theme .length-watch-page {
@@ -732,8 +1936,8 @@ body.dark-theme {
   }
 
   body.no-theme {
-    background-color: rgba(35, 35, 35, 1);
-    color: #f0f0f0;
+    background-color: #0f1117;
+    color: #f0f6fc;
   }
 
   .no-theme .length-watch-page {

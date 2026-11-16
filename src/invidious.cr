@@ -101,7 +101,7 @@ CURRENT_TAG     = {{ "#{`git tag --points-at HEAD`.strip}" }}
 # This is used to determine the `?v=` on the end of file URLs (for cache busting). We
 # only need to expire modified assets, so we can use this to find the last commit that changes
 # any assets
-ASSET_COMMIT = {{ "#{`git rev-list HEAD --max-count=1 --abbrev-commit -- assets`.strip}" }}
+ASSET_COMMIT = {{ "#{`git rev-list HEAD --max-count=1 --abbrev-commit -- assets`.strip}" }} + "_#{Time.utc.to_unix}"
 
 SOFTWARE = {
   "name"    => "invidious",

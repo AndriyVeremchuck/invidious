@@ -149,7 +149,8 @@ module Invidious::Routes::Account
     referer = get_referer(env)
 
     if !user
-      return env.redirect referer
+      env.response.cookies["watched_ids"] = HTTP::Cookie.new("watched_ids", "", path: "/", max_age: 0.seconds)
+      return env.redirect "/feed/history"
     end
 
     user = user.as(User)
@@ -168,6 +169,7 @@ module Invidious::Routes::Account
     referer = get_referer(env)
 
     if !user
+      env.response.cookies["watched_ids"] = HTTP::Cookie.new("watched_ids", "", path: "/", max_age: 0.seconds)
       return env.redirect referer
     end
 

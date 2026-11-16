@@ -63,9 +63,40 @@ if (CONFIG.videojs.max_goal_buffer_length) {
     videojs.Vhs.MAX_GOAL_BUFFER_LENGTH = CONFIG.videojs.max_goal_buffer_length;
 }
 
+var playerEl = document.getElementById('player');
+if (playerEl) {
 var player = videojs('player', options);
 
+window.addEventListener('error', function (e) {
+    if (e.message && e.message.indexOf('addPropertiesToMaster') !== -1) {
+        var currentSources = player.currentSources ? player.currentSources() : [];
+        for (var i = 0; i < currentSources.length; i++) {
+            if (currentSources[i].type && currentSources[i].type.indexOf('mp4') !== -1) {
+                console.warn('Recovering from DASH parse crash, switching to MP4...');
+                player.src(currentSources[i]);
+                player.play().catch(function(){});
+                break;
+            }
+        }
+    }
+});
+
 player.on('error', function () {
+    var currentSources = player.currentSources ? player.currentSources() : [];
+    var mp4 = null;
+    for (var i = 0; i < currentSources.length; i++) {
+        if (currentSources[i].type && currentSources[i].type.indexOf('mp4') !== -1) {
+            mp4 = currentSources[i];
+            break;
+        }
+    }
+    if (mp4 && player.currentSrc().indexOf('manifest/dash') !== -1) {
+        console.warn('Falling back from DASH to MP4 source:', mp4.src);
+        player.src(mp4);
+        player.play().catch(function(){});
+        return;
+    }
+
     if (video_data.params.quality === 'dash') return;
 
     var localNotDisabled = (
@@ -846,6 +877,7 @@ if (location.pathname.startsWith('/embed/')) {
 
     var cb = player.getChild('ControlBar');
     cb.addChild(watch_on_invidious_button);
+}
 }
 
 addEventListener('DOMContentLoaded', function () {

@@ -60,7 +60,7 @@ COPY --from=openssl-builder /openssl-${OPENSSL_VERSION} /openssl-${OPENSSL_VERSI
 # - https://github.com/84codes/crystal-packages/issues/41
 #
 # `-no-pie` can be removed once it's fixed.
-RUN --mount=type=cache,target=/root/.cache/crystal if [[ "${release}" == 1 ]] ; then \
+RUN if [[ "${release}" == 1 ]] ; then \
         PKG_CONFIG_PATH=/openssl-${OPENSSL_VERSION} \
         crystal build ./src/invidious.cr \
         --release \

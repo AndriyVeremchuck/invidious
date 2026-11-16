@@ -676,7 +676,7 @@ default_user_preferences:
   ##
   ## Default: en-US
   ##
-  #locale: en-US
+  locale: uk
 
   ##
   ## Default geographical location for content.
@@ -691,7 +691,7 @@ default_user_preferences:
   ##
   ## Default: US
   ##
-  #region: US
+  region: UA
 
   ##
   ## Top 3 preferred languages for video captions.
@@ -775,7 +775,7 @@ default_user_preferences:
   ## Accepted values: Popular, Trending, Subscriptions, Playlists, <none>
   ## Default: Popular
   ##
-  #default_home: Popular
+  default_home: Trending
 
   ##
   ## Default number of results to display per page.
@@ -820,9 +820,9 @@ default_user_preferences:
   ## Default player style.
   ##
   ## Accepted values: invidious, youtube
-  ## Default: invidious
+  ## Default: youtube
   ##
-  #player_style: invidious
+  player_style: youtube
 
   ##
   ## Show/Hide the "related videos" sidebar when

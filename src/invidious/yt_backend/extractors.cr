@@ -100,7 +100,11 @@ private module Parsers
       # When view count is disabled the "viewCountText" is not present on InnerTube data.
       # TODO change default value to nil and typical encoding type to tuple storing type (watchers, views, etc)
       # and count
-      view_count = item_contents.dig?("viewCountText", "simpleText").try &.as_s.gsub(/\D+/, "").to_i64? || 0_i64
+      view_text = extract_text(item_contents["viewCountText"]?) || extract_text(item_contents["shortViewCountText"]?) || ""
+      view_count = short_text_to_number(view_text)
+      if view_count == 0_i64 && !view_text.empty?
+        view_count = view_text.gsub(/\D+/, "").to_i64? || 0_i64
+      end
       description_html = item_contents["descriptionSnippet"]?.try { |t| parse_content(t, video_id) } || ""
 
       # The length information generally exist in "lengthText". However, the info can sometimes
@@ -726,16 +730,22 @@ private module Parsers
             metadata_parts = row.dig("metadataParts").try &.as_a
 
             if view_count_text.nil?
-              view_count_text = metadata_parts.try &.find { |item| item["icon"]?.nil? && item.dig?("text", "content").try &.as_s.includes?("views") }
-                .try &.dig("text", "content").as_s
+              view_count_text = metadata_parts.try &.find { |item|
+                item["icon"]?.nil? && (t = item.dig?("text", "content").try &.as_s) &&
+                (t.includes?("view") || t.includes?("watching") || t.includes?("перегляд") || t.includes?("просмотр") || t.includes?("глядач"))
+              }.try &.dig("text", "content").as_s
             end
             if published.nil?
-              published = metadata_parts.try &.find { |item| item["icon"]?.nil? && item.dig?("text", "content").try &.as_s.includes?("ago") }
-                .try { |item| decode_date(item.dig("text", "content").as_s) }
+              published = metadata_parts.try &.find { |item|
+                item["icon"]?.nil? && (t = item.dig?("text", "content").try &.as_s) &&
+                (t.includes?("ago") || t.includes?("тому") || t.includes?("назад"))
+              }.try { |item| decode_date(item.dig("text", "content").as_s) }
             end
             if premiere_timestamp.nil?
-              premiere_timestamp = metadata_parts.try &.find { |item| item["icon"]?.nil? && item.dig?("text", "content").try &.as_s.includes?("Premieres") }
-                .try { |item| decode_date(item.dig("text", "content").as_s) }
+              premiere_timestamp = metadata_parts.try &.find { |item|
+                item["icon"]?.nil? && (t = item.dig?("text", "content").try &.as_s) &&
+                (t.includes?("Premiere") || t.includes?("Прем'єр") || t.includes?("Премьер"))
+              }.try { |item| decode_date(item.dig("text", "content").as_s) }
             end
 
             break if !view_count_text.nil? && !published.nil? && !premiere_timestamp.nil?

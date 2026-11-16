@@ -18,113 +18,29 @@ module Invidious::Routes::Search
   end
 
   def self.results(env)
-    locale = env.get("preferences").as(Preferences).locale
-
-    query = env.params.query["search_query"]?
-    query ||= env.params.query["q"]?
-
-    page = env.params.query["page"]?
-
-    if query && !query.empty?
-      if page && !page.empty?
-        env.redirect "/search?q=" + URI.encode_www_form(query) + "&page=" + page
-      else
-        env.redirect "/search?q=" + URI.encode_www_form(query)
+    if raw_query = env.request.query
+      if !raw_query.empty?
+        return env.redirect "/feed/trending?#{raw_query}"
       end
-    else
-      env.redirect "/search"
     end
+    env.redirect "/feed/trending"
   end
 
   def self.search(env)
-    preferences = env.get("preferences").as(Preferences)
-    locale = preferences.locale
-
-    uri_params = URI::Params.new
-    if env.request.method == "GET"
-      uri_params = env.params.query
-    else
-      uri_params = env.params.body
+    if raw_query = env.request.query
+      if !raw_query.empty?
+        return env.redirect "/feed/trending?#{raw_query}"
+      end
     end
-
-    region = uri_params["region"]? || preferences.region
-
-    query = Invidious::Search::Query.new(uri_params, :regular, region)
-
-    if query.empty?
-      # Display the full page search box implemented in #1977
-      env.set "search", ""
-      templated "search_homepage", navbar_search: false
-    else
-      user = env.get? "user"
-
-      # An URL was copy/pasted in the search box.
-      # Redirect the user to the appropriate page.
-      if query.url?
-        return env.redirect UrlSanitizer.process(query.text).to_s
-      end
-
-      begin
-        if user
-          items = query.process(user.as(User))
-        else
-          items = query.process
-        end
-      rescue ex : ChannelSearchException
-        return Errors.error_template(404, "Unable to find channel with id of '#{HTML.escape(ex.channel)}'. Are you sure that's an actual channel id? It should look like 'UC4QobU6STFB0P71PMvOGN5A'.")
-      rescue ex
-        return Errors.error_template(500, ex)
-      end
-
-      redirect_url = Invidious::Frontend::Misc.redirect_url(env)
-
-      # Pagination
-      page_nav_html = Frontend::Pagination.nav_numeric(locale,
-        base_url: "/search?#{query.to_http_params}",
-        current_page: query.page,
-        show_next: (items.size >= 20)
-      )
-
-      if query.type == Invidious::Search::Query::Type::Channel
-        env.set "search", "channel:#{query.channel} #{query.text}"
-      else
-        env.set "search", query.text
-      end
-
-      templated "search"
-    end
+    env.redirect "/feed/trending"
   end
 
   def self.hashtag(env : HTTP::Server::Context)
-    locale = env.get("preferences").as(Preferences).locale
-
     hashtag = env.params.url["hashtag"]?
-    if hashtag.nil? || hashtag.empty?
-      return Errors.error_template(400, "Invalid request")
-    end
-
-    page = env.params.query["page"]?
-    if page.nil?
-      page = 1
+    if hashtag && !hashtag.empty?
+      env.redirect "/feed/trending?q=" + URI.encode_www_form("##{hashtag}")
     else
-      page = Math.max(1, page.to_i)
-      env.params.query.delete_all("page")
+      env.redirect "/feed/trending"
     end
-
-    begin
-      items = Invidious::Search::Hashtag.fetch_hashtag(hashtag, page)
-    rescue ex
-      return Errors.error_template(500, ex)
-    end
-
-    # Pagination
-    hashtag_encoded = URI.encode_www_form(hashtag, space_to_plus: false)
-    page_nav_html = Frontend::Pagination.nav_numeric(locale,
-      base_url: "/hashtag/#{hashtag_encoded}",
-      current_page: page,
-      show_next: (items.size >= 60)
-    )
-
-    templated "hashtag"
   end
 end

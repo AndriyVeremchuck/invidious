@@ -152,4 +152,31 @@
             event.preventDefault();
         }
     });
+
+    // Handle search filters toggle from navbar button
+    var filterCollapse = document.getElementById('filters-collapse');
+    var navFilterContainer = document.getElementById('navbar-filters-btn-container');
+    var navFilterBtn = document.getElementById('navbar-toggle-filters');
+    var navFilterSymbol = document.getElementById('navbar-filter-symbol');
+
+    if (filterCollapse && navFilterContainer) {
+        navFilterContainer.style.display = 'inline-block';
+
+        if (filterCollapse.open && navFilterSymbol) {
+            navFilterSymbol.textContent = '[ − ]';
+        }
+
+        if (navFilterBtn) {
+            navFilterBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                filterCollapse.open = !filterCollapse.open;
+                if (navFilterSymbol) {
+                    navFilterSymbol.textContent = filterCollapse.open ? '[ − ]' : '[ + ]';
+                }
+                if (filterCollapse.open) {
+                    filterCollapse.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            });
+        }
+    }
 })();

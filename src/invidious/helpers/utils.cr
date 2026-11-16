@@ -175,13 +175,15 @@ def number_with_separator(number)
 end
 
 def short_text_to_number(short_text : String) : Int64
-  matches = /(?<number>\d+(\.\d+)?)\s?(?<suffix>[mMkKbB]?)/.match(short_text)
+  # Normalize comma to dot for localized decimals (e.g. 1,2 млн or 1,2 тис)
+  normalized = short_text.gsub(",", ".")
+  matches = /(?<number>\d+(\.\d+)?)\s?(?<suffix>[mMkKbB]|тис|тыс|млн|млрд)?/i.match(normalized)
   number = matches.try &.["number"].to_f || 0.0
 
-  case matches.try &.["suffix"].downcase
-  when "k" then number *= 1_000
-  when "m" then number *= 1_000_000
-  when "b" then number *= 1_000_000_000
+  case matches.try &.["suffix"].try &.downcase
+  when "k", "тис", "тыс" then number *= 1_000
+  when "m", "млн"        then number *= 1_000_000
+  when "b", "млрд"       then number *= 1_000_000_000
   end
 
   return number.to_i64

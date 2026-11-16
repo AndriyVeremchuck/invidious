@@ -13,11 +13,13 @@ services:
       dockerfile: docker/Dockerfile
     restart: unless-stopped
     ports:
-      - "127.0.0.1:3000:3000"
+      - "0.0.0.0:3000:3000"
     depends_on:
       invidious-db:
         condition: service_healthy
         restart: true
+      companion:
+        condition: service_started
     environment:
       # Please read the following file for a comprehensive list of all available
       # configuration options and their associated syntax:
@@ -34,12 +36,26 @@ services:
         # domain:
         # https_only: false
         # statistics_enabled: false
-        hmac_key: "CHANGE_ME!!"
+        hmac_key: "c8f2a6e9d0b34175b583f7492cda12e8"
+        cookies: "SID=g.a000EwngjN4QvkcZrKTcHy__-SFPPiR_UUhD2ugZi6mTEw9GDzPeHnE-zN1mhXfO6qCqVL4NLQACgYKAWYSARYSFQHGX2MiMiEGlkytehOxyE9p1nHWBhoVAUF8yKpn4cxBJKWAKjpU5ZxokXg20076; HSID=A9tUoLF2kwxgjk-Jj; SSID=APsBh-ugcIbLgXc9-; SAPISID=Sif94y6aHraJm1Tm/A-cKxXWu7ixs1d6gK; __Secure-3PAPISID=Sif94y6aHraJm1Tm/A-cKxXWu7ixs1d6gK; __Secure-3PSID=g.a000DwngjOxER8-ZaDwlOrubnH-kdx4mTr-RJfqdjAUUSC82mRxGEdYxuPERmtnc0J9vgl5ZGAACgYKATQSARYSFQHGX2Mi1FxgAfA0HNu6CLgAWuEyhRoVAUF8yKo6w32YnMYhf2E_ajsKjz5f0076; __Secure-BUCKET=CKEF; YSC=9t5gPHloxR8; VISITOR_INFO1_LIVE=dtLLDOGBS0E; VISITOR_PRIVACY_METADATA=CgJVQRIEGgAgHA%3D%3D; LOGIN_INFO=AFmmF2swRgIhALh29JJSFocQ6mjWqv5NXiK-VsFmnQU2cf_d5C0_6WckAiEAjgWVrcnaoLjI2z9XIUSwGMgCLa8IcmCvu8CSNrgWc8o:QUQ3MjNmejNRcF9JRlhMbFZudzFETDFTSllfT2VlbXlLRXRjSTBoUUcyMU51bmpwSDFxYWlXVF84YXJiYnRMVEVyQTVmTXN6YmNtcEdaYU5lNkNzMndwY0lJSldPUlJXbkNyRFNXb0d0azNhcnozNTAta0ZQNlNINEFfUDExb0lRZ3dPNy1JWHg1ZEhZekVHX1hUbGo1ZGNkdXI4UWFSSUR3; __Secure-YNID=CtsBCAUSjQEBDB6PDJ_ngWGYyXD5lM_AOzhx6qOGqF1hRy6QQ7ocKUt9txznFRWhG3DEBS53t3ZzP3fbhsNOSsF0yJJGRh5lRDRZdIZMofQ_cJscS3h13iAdZ0zO9tx_J-estHUCe1i1Uirs6vg6GSHt73-fSRotgvtJFL1QJZ5OxHX2kemeoVmXgFt02HcS2jLU9tMoBTJFARxY9WpkZdBdAZfoa8XNFEtMWzPqKi0A9WwFsEW9yJOuaeEfStfkla-4SK4FYRgBB50FrN43BzWuu8dS3om4dUe6BG8D; __Secure-ROLLOUT_TOKEN=CP3b1KCR8YenQxC06-CkqL2XAxiBy5rowoiYAw%3D%3D; PREF=tz=Europe.Kiev&f4=4000000&repeat=NONE&autoplay=true&f5=30000; wide=0; __Secure-1PSIDTS=sidts-CjQBnJZzamJX7sMxvqr7_1tjXdTKFlrVGslQoeG_ZDkltXZaZ1FhJpWcG_kfnCg8QgXax8WGEAA; __Secure-3PSIDTS=sidts-CjQBnJZzamJX7sMxvqr7_1tjXdTKFlrVGslQoeG_ZDkltXZaZ1FhJpWcG_kfnCg8QgXax8WGEAA; CONSISTENCY=AIudn8rbsnMJ772CaSMOUHLXh6198BXDEzCSQLsXpGqJSRhZIkjRDompDPrEX_csbLnvylQ4eDC-qPg72L8AbAM9oXEZklCfXOQQ3xhszI8ciNM7xwiwqqYunfc28j42hB34WQqRffYO6x-icX565HX7; __Secure-3PSIDCC=APD_SKE_B8WYJnJpLeIrxYRrdlEobf13mcfWOyCgRVW6MEdgca0R9Liiz7WXX5sKtqCIcuTEJg; ST-tladcw=session_logininfo=AFmmF2swRgIhALh29JJSFocQ6mjWqv5NXiK-VsFmnQU2cf_d5C0_6WckAiEAjgWVrcnaoLjI2z9XIUSwGMgCLa8IcmCvu8CSNrgWc8o%3AQUQ3MjNmejNRcF9JRlhMbFZudzFETDFTSllfT2VlbXlLRXRjSTBoUUcyMU51bmpwSDFxYWlXVF84YXJiYnRMVEVyQTVmTXN6YmNtcEdaYU5lNkNzMndwY0lJSldPUlJXbkNyRFNXb0d0azNhcnozNTAta0ZQNlNINEFfUDExb0lRZ3dPNy1JWHg1ZEhZekVHX1hUbGo1ZGNkdXI4UWFSSUR3; ST-xuwub9=session_logininfo=AFmmF2swRgIhALh29JJSFocQ6mjWqv5NXiK-VsFmnQU2cf_d5C0_6WckAiEAjgWVrcnaoLjI2z9XIUSwGMgCLa8IcmCvu8CSNrgWc8o%3AQUQ3MjNmejNRcF9JRlhMbFZudzFETDFTSllfT2VlbXlLRXRjSTBoUUcyMU51bmpwSDFxYWlXVF84YXJiYnRMVEVyQTVmTXN6YmNtcEdaYU5lNkNzMndwY0lJSldPUlJXbkNyRFNXb0d0azNhcnozNTAta0ZQNlNINEFfUDExb0lRZ3dPNy1JWHg1ZEhZekVHX1hUbGo1ZGNkdXI4UWFSSUR3"
+        invidious_companion:
+          - private_url: "http://companion:8282/companion"
+        invidious_companion_key: "k8F2a9E4d1B7c0X5"
     healthcheck:
       test: wget -nv --tries=1 --spider http://127.0.0.1:3000/api/v1/stats || exit 1
       interval: 30s
       timeout: 5s
       retries: 2
+
+  companion:
+    image: quay.io/invidious/invidious-companion:latest
+    restart: unless-stopped
+    environment:
+      - SERVER_SECRET_KEY=k8F2a9E4d1B7c0X5
+      - YOUTUBE_SESSION_OAUTH_ENABLED=false
+      - YOUTUBE_SESSION_COOKIES=SID=g.a000EwngjN4QvkcZrKTcHy__-SFPPiR_UUhD2ugZi6mTEw9GDzPeHnE-zN1mhXfO6qCqVL4NLQACgYKAWYSARYSFQHGX2MiMiEGlkytehOxyE9p1nHWBhoVAUF8yKpn4cxBJKWAKjpU5ZxokXg20076; HSID=A9tUoLF2kwxgjk-Jj; SSID=APsBh-ugcIbLgXc9-; SAPISID=Sif94y6aHraJm1Tm/A-cKxXWu7ixs1d6gK; __Secure-3PAPISID=Sif94y6aHraJm1Tm/A-cKxXWu7ixs1d6gK; __Secure-3PSID=g.a000DwngjOxER8-ZaDwlOrubnH-kdx4mTr-RJfqdjAUUSC82mRxGEdYxuPERmtnc0J9vgl5ZGAACgYKATQSARYSFQHGX2Mi1FxgAfA0HNu6CLgAWuEyhRoVAUF8yKo6w32YnMYhf2E_ajsKjz5f0076; __Secure-BUCKET=CKEF; YSC=9t5gPHloxR8; VISITOR_INFO1_LIVE=dtLLDOGBS0E; VISITOR_PRIVACY_METADATA=CgJVQRIEGgAgHA%3D%3D; LOGIN_INFO=AFmmF2swRgIhALh29JJSFocQ6mjWqv5NXiK-VsFmnQU2cf_d5C0_6WckAiEAjgWVrcnaoLjI2z9XIUSwGMgCLa8IcmCvu8CSNrgWc8o:QUQ3MjNmejNRcF9JRlhMbFZudzFETDFTSllfT2VlbXlLRXRjSTBoUUcyMU51bmpwSDFxYWlXVF84YXJiYnRMVEVyQTVmTXN6YmNtcEdaYU5lNkNzMndwY0lJSldPUlJXbkNyRFNXb0d0azNhcnozNTAta0ZQNlNINEFfUDExb0lRZ3dPNy1JWHg1ZEhZekVHX1hUbGo1ZGNkdXI4UWFSSUR3; __Secure-YNID=CtsBCAUSjQEBDB6PDJ_ngWGYyXD5lM_AOzhx6qOGqF1hRy6QQ7ocKUt9txznFRWhG3DEBS53t3ZzP3fbhsNOSsF0yJJGRh5lRDRZdIZMofQ_cJscS3h13iAdZ0zO9tx_J-estHUCe1i1Uirs6vg6GSHt73-fSRotgvtJFL1QJZ5OxHX2kemeoVmXgFt02HcS2jLU9tMoBTJFARxY9WpkZdBdAZfoa8XNFEtMWzPqKi0A9WwFsEW9yJOuaeEfStfkla-4SK4FYRgBB50FrN43BzWuu8dS3om4dUe6BG8D; __Secure-ROLLOUT_TOKEN=CP3b1KCR8YenQxC06-CkqL2XAxiBy5rowoiYAw%3D%3D; PREF=tz=Europe.Kiev&f4=4000000&repeat=NONE&autoplay=true&f5=30000; wide=0; __Secure-1PSIDTS=sidts-CjQBnJZzamJX7sMxvqr7_1tjXdTKFlrVGslQoeG_ZDkltXZaZ1FhJpWcG_kfnCg8QgXax8WGEAA; __Secure-3PSIDTS=sidts-CjQBnJZzamJX7sMxvqr7_1tjXdTKFlrVGslQoeG_ZDkltXZaZ1FhJpWcG_kfnCg8QgXax8WGEAA; CONSISTENCY=AIudn8rbsnMJ772CaSMOUHLXh6198BXDEzCSQLsXpGqJSRhZIkjRDompDPrEX_csbLnvylQ4eDC-qPg72L8AbAM9oXEZklCfXOQQ3xhszI8ciNM7xwiwqqYunfc28j42hB34WQqRffYO6x-icX565HX7; __Secure-3PSIDCC=APD_SKE_B8WYJnJpLeIrxYRrdlEobf13mcfWOyCgRVW6MEdgca0R9Liiz7WXX5sKtqCIcuTEJg; ST-tladcw=session_logininfo=AFmmF2swRgIhALh29JJSFocQ6mjWqv5NXiK-VsFmnQU2cf_d5C0_6WckAiEAjgWVrcnaoLjI2z9XIUSwGMgCLa8IcmCvu8CSNrgWc8o%3AQUQ3MjNmejNRcF9JRlhMbFZudzFETDFTSllfT2VlbXlLRXRjSTBoUUcyMU51bmpwSDFxYWlXVF84YXJiYnRMVEVyQTVmTXN6YmNtcEdaYU5lNkNzMndwY0lJSldPUlJXbkNyRFNXb0d0azNhcnozNTAta0ZQNlNINEFfUDExb0lRZ3dPNy1JWHg1ZEhZekVHX1hUbGo1ZGNkdXI4UWFSSUR3; ST-xuwub9=session_logininfo=AFmmF2swRgIhALh29JJSFocQ6mjWqv5NXiK-VsFmnQU2cf_d5C0_6WckAiEAjgWVrcnaoLjI2z9XIUSwGMgCLa8IcmCvu8CSNrgWc8o%3AQUQ3MjNmejNRcF9JRlhMbFZudzFETDFTSllfT2VlbXlLRXRjSTBoUUcyMU51bmpwSDFxYWlXVF84YXJiYnRMVEVyQTVmTXN6YmNtcEdaYU5lNkNzMndwY0lJSldPUlJXbkNyRFNXb0d0azNhcnozNTAta0ZQNlNINEFfUDExb0lRZ3dPNy1JWHg1ZEhZekVHX1hUbGo1ZGNkdXI4UWFSSUR3
+    volumes:
+      - companioncache:/var/tmp:rw
 
   invidious-db:
     image: docker.io/library/postgres:14
@@ -57,3 +73,4 @@ services:
 
 volumes:
   postgresdata:
+  companioncache:

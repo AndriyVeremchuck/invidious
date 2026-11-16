@@ -1,3 +1,4 @@
+<% if params.player_style == "invidious" %>
 <link rel="stylesheet" href="/videojs/video.js/video-js.css?v=<%= ASSET_COMMIT %>">
 <link rel="stylesheet" href="/videojs/videojs-http-source-selector/videojs-http-source-selector.css?v=<%= ASSET_COMMIT %>">
 <link rel="stylesheet" href="/videojs/videojs-markers/videojs.markers.css?v=<%= ASSET_COMMIT %>">
@@ -28,4 +29,5 @@
 <% if !params.listen && params.vr_mode %>
     <link rel="stylesheet" href="/videojs/videojs-vr/videojs-vr.css?v=<%= ASSET_COMMIT %>">
     <script src="/videojs/videojs-vr/videojs-vr.js?v=<%= ASSET_COMMIT %>"></script>
+<% end %>
 <% end %>

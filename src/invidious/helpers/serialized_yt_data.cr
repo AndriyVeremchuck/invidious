@@ -27,6 +27,10 @@ struct SearchVideo
   property author_thumbnail : String?
   property badges : VideoBadges
 
+  def live_now : Bool
+    badges.live_now?
+  end
+
   def to_xml(auto_generated, query_params, xml : XML::Builder)
     query_params["v"] = self.id
 

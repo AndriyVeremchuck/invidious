@@ -1,20 +1,13 @@
-<%
-	search_privacy = preferences.search_privacy
-%>
-
-<% if search_privacy %>
-<form class="pure-form" action="/search" method="post">
-<% else %>
-<form class="pure-form" action="/search" method="get">
-<% end %>
+<form class="pure-form" action="#" method="get" onsubmit="if (window.performInlineSearch) { window.performInlineSearch(document.getElementById('searchbox').value, true); } return false;">
 	<fieldset>
 		<input type="search" id="searchbox" autocorrect="off"
 		autocapitalize="none" spellcheck="false" <% if autofocus %>autofocus<% end %>
 		name="q" placeholder="<%= I18n.translate(locale, "search") %>"
 		title="<%= I18n.translate(locale, "search") %>"
-		value="<%= env.get?("search").try {|x| HTML.escape(x.as(String)) } %>">
+		value="<%= env.get?("search").try {|x| HTML.escape(x.as(String)) } %>"
+		onkeydown="if (event.key === 'Enter') { if (window.performInlineSearch) { window.performInlineSearch(this.value, true); } event.preventDefault(); }">
 	</fieldset>
-	<button type="submit" id="searchbutton" aria-label="<%= I18n.translate(locale, "search") %>">
+	<button type="button" id="searchbutton" aria-label="<%= I18n.translate(locale, "search") %>" onclick="if (window.performInlineSearch) { window.performInlineSearch(document.getElementById('searchbox').value, true); }">
 		<i class="icon ion-ios-search"></i>
 	</button>
 </form>

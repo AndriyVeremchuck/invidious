@@ -43,23 +43,21 @@ module Invidious::Routes::BeforeAll
       frame_ancestors = "'none'"
     end
 
-    # TODO: Remove style-src's 'unsafe-inline', requires to remove all
-    # inline styles (<style> [..] </style>, style=" [..] ")
     env.response.headers["Content-Security-Policy"] = {
       "default-src 'none'",
-      "script-src 'self'",
+      "script-src 'self' 'unsafe-inline' https://www.youtube.com https://s.ytimg.com",
       "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data:",
+      "img-src 'self' data: https://*.ytimg.com https://*.youtube.com",
       "font-src 'self' data:",
-      "connect-src 'self' " + COMPANION_CSP.companion_urls,
+      "connect-src 'self' https://*.googlevideo.com https://*.youtube.com " + COMPANION_CSP.companion_urls,
       "manifest-src 'self'",
-      "media-src 'self' blob: " + COMPANION_CSP.companion_urls,
-      "child-src 'self' blob:",
-      "frame-src 'self'",
+      "media-src 'self' blob: https://*.googlevideo.com https://*.youtube.com " + COMPANION_CSP.companion_urls,
+      "child-src 'self' blob: https://www.youtube.com https://www.youtube-nocookie.com",
+      "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com",
       "frame-ancestors " + frame_ancestors,
     }.join("; ")
 
-    env.response.headers["Referrer-Policy"] = "same-origin"
+    env.response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
 
     # Ask the chrom*-based browsers to disable FLoC
     # See: https://blog.runcloud.io/google-floc/

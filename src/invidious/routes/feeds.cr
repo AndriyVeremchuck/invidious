@@ -9,23 +9,22 @@ module Invidious::Routes::Feeds
     locale = env.get("preferences").as(Preferences).locale
 
     user = env.get? "user"
-    referer = get_referer(env)
+    items_created = [] of InvidiousPlaylist
+    items_saved = [] of InvidiousPlaylist
 
-    return env.redirect "/" if user.nil?
+    if user
+      u = user.as(User)
+      items_created = Invidious::Database::Playlists.select_like_iv(u.email)
+      items_created.map! do |item|
+        item.author = ""
+        item
+      end
 
-    user = user.as(User)
-
-    # TODO: make a single DB call and separate the items here?
-    items_created = Invidious::Database::Playlists.select_like_iv(user.email)
-    items_created.map! do |item|
-      item.author = ""
-      item
-    end
-
-    items_saved = Invidious::Database::Playlists.select_not_like_iv(user.email)
-    items_saved.map! do |item|
-      item.author = ""
-      item
+      items_saved = Invidious::Database::Playlists.select_not_like_iv(u.email)
+      items_saved.map! do |item|
+        item.author = ""
+        item
+      end
     end
 
     templated "feeds/playlists"
@@ -114,25 +113,33 @@ module Invidious::Routes::Feeds
     locale = env.get("preferences").as(Preferences).locale
 
     user = env.get? "user"
-    referer = get_referer(env)
 
     page = env.params.query["page"]?.try &.to_i?
     page ||= 1
 
-    if !user
-      return env.redirect referer
-    end
-
-    user = user.as(User)
-
     max_results = env.params.query["max_results"]?.try &.to_i?.try &.clamp(0, MAX_ITEMS_PER_PAGE)
-    max_results ||= user.preferences.max_results
+    max_results ||= (user ? user.as(User).preferences.max_results : env.get("preferences").as(Preferences).max_results)
     max_results ||= CONFIG.default_user_preferences.max_results
 
-    if user.watched[(page - 1) * max_results]?
-      watched = user.watched.reverse[(page - 1) * max_results, max_results]
+    watched = [] of String
+    total_watched_size = 0
+
+    if user
+      u = user.as(User)
+      total_watched_size = u.watched.size
+      if u.watched[(page - 1) * max_results]?
+        watched = u.watched.reverse[(page - 1) * max_results, max_results]
+      end
+    else
+      cookie_watched = env.request.cookies["watched_ids"]?.try(&.value) || ""
+      ids = URI.decode_www_form(cookie_watched).split(",").map(&.strip).reject(&.empty?).uniq
+      total_watched_size = ids.size
+      start_idx = (page - 1) * max_results
+      if start_idx < ids.size
+        count = Math.min(max_results, ids.size - start_idx)
+        watched = ids[start_idx, count]
+      end
     end
-    watched ||= [] of String
 
     # Used for pagination links
     base_url = "/feed/history"

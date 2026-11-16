@@ -1,6 +1,19 @@
 <%
     invidious_companion_check_id = invidious_companion_encrypt(video.id) if invidious_companion
+    has_playable_streams = ((video.hls_manifest_url && video.live_now && !CONFIG.disabled?("livestreams")) ||
+                           (params.quality == "dash" && !video.live_now) ||
+                           !fmt_stream.empty? ||
+                           (params.listen && !audio_streams.empty?))
 %>
+<% if params.player_style != "invidious" %>
+    <iframe id="player" src="https://www.youtube-nocookie.com/embed/<%= video.id %>?autoplay=1&enablejsapi=1&rel=0"
+        title="<%= HTML.escape(video.title) %>"
+        style="width: 100%; aspect-ratio: 16 / 9; border: none; border-radius: 14px; background: #000; box-shadow: 0 4px 20px rgba(0,0,0,0.5);"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen>
+    </iframe>
+<% else %>
 <video style="outline:none;width:100%;background-color:#000" playsinline poster="<%= thumbnail %>"
     id="player" class="on-video_player video-js player-style-<%= params.player_style %>"
     preload="<% if params.preload %>auto<% else %>none<% end %>"
@@ -39,7 +52,7 @@
                 <% end %>
             <% end %>
         <% else %>
-            <% if params.quality == "dash"
+            <% if params.quality == "dash" && !video.live_now
                src_url = "/api/manifest/dash/id/" + video.id + "?local=true&unique_res=1"
                src_url = invidious_companion.public_url.to_s + src_url +
                             "&check=#{invidious_companion_check_id}" if (invidious_companion)
@@ -98,3 +111,4 @@
 %>
 </script>
 <script src="/js/player.js?v=<%= ASSET_COMMIT %>"></script>
+<% end %>

@@ -1,6 +1,6 @@
 #filters-collapse summary {
-	/* This should hide the marker */
-	display: block;
+	/* Hide the in-page summary since toggle button is in the navbar */
+	display: none !important;
 
 	font-size: 1.17em;
 	font-weight: bold;

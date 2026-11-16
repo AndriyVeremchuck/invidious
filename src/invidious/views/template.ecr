@@ -2,9 +2,11 @@
   preferences = env.get("preferences").as(Preferences)
   locale = preferences.locale
   dark_mode = preferences.dark_mode
+  ua = env.request.headers["User-Agent"]? || ""
+  is_android = ua.includes?("Android")
 %>
 <!DOCTYPE html>
-<html lang="<%= locale %>">
+<html lang="<%= locale %>" class="<%= is_android ? "is-android" : "" %>">
 
 <head>
     <meta charset="utf-8">
@@ -21,88 +23,1033 @@
     <link rel="stylesheet" href="/css/pure-min.css?v=<%= ASSET_COMMIT %>">
     <link rel="stylesheet" href="/css/grids-responsive-min.css?v=<%= ASSET_COMMIT %>">
     <link rel="stylesheet" href="/css/ionicons.min.css?v=<%= ASSET_COMMIT %>">
-    <link rel="stylesheet" href="/css/default.css?v=<%= ASSET_COMMIT %>">
+    <link rel="stylesheet" href="/css/default.css?v=<%= Time.utc.to_unix %>">
     <link rel="stylesheet" href="/css/carousel.css?v=<%= ASSET_COMMIT %>">
+    <style>
+      .video-card-wrapper {
+        padding: 4px !important;
+        box-sizing: border-box !important;
+        display: flex !important;
+        cursor: pointer !important;
+      }
+      .video-card-box {
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+        padding: 6px !important;
+        margin: 0 !important;
+        border-radius: 12px !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+        transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+        box-sizing: border-box !important;
+        cursor: pointer !important;
+      }
+      .video-card-box:hover {
+        transform: translateY(-3px) !important;
+        box-shadow: 0 8px 20px rgba(37, 99, 235, 0.18) !important;
+        border-color: #2563eb !important;
+      }
+      .video-card-box .thumbnail {
+        border-radius: 8px !important;
+        overflow: hidden !important;
+        position: relative !important;
+        background-color: #000 !important;
+        margin: 0 0 4px 0 !important;
+      }
+      .video-card-box .thumbnail img {
+        border-radius: 8px !important;
+        display: block !important;
+        width: 100% !important;
+        aspect-ratio: 16/9 !important;
+        object-fit: cover !important;
+      }
+      .video-card-box .video-title-row {
+        height: 2.6em !important;
+        min-height: 2.6em !important;
+        max-height: 2.6em !important;
+        margin: 2px 0 !important;
+        overflow: hidden !important;
+      }
+      .video-card-box .video-title-row p {
+        margin: 0 !important;
+        padding: 0 !important;
+        font-size: 0.82em !important;
+        font-weight: 600 !important;
+        line-height: 1.3 !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+      }
+      .video-card-box .video-meta-row {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        margin: 2px 0 0 0 !important;
+        font-size: 0.76em !important;
+        line-height: 1.2 !important;
+        gap: 6px !important;
+        min-height: 1.4em !important;
+      }
+      .video-card-box .channel-name-container {
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+      }
+      .video-card-box .channel-name {
+        font-weight: 500 !important;
+        opacity: 0.85 !important;
+        margin: 0 !important;
+      }
+      .video-card-box .views-count-container {
+        flex: 0 0 auto !important;
+        text-align: right !important;
+        white-space: nowrap !important;
+      }
+      .video-card-box .views-count {
+        font-weight: 600 !important;
+        opacity: 0.85 !important;
+        margin: 0 !important;
+      }
+      .video-card-box .views-count.live-tag {
+        color: #ef4444 !important;
+        font-weight: bold !important;
+      }
+
+      /* Strict 100vh No-Vertical-Scroll App Layout with equal 8px insets */
+      html, body {
+        height: 100vh !important;
+        max-height: 100vh !important;
+        overflow: hidden !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        background: #000000 !important;
+      }
+
+      #contents {
+        height: 100% !important;
+        max-height: 100% !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow: hidden !important;
+        position: relative !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-sizing: border-box !important;
+      }
+
+      .pure-g {
+        width: 100% !important;
+        height: 100% !important;
+        margin: 0 !important;
+      }
+
+      #search-widget,
+      .feed-menu,
+      .pure-menu,
+      header,
+      footer,
+      .navbar-right,
+      .user-field,
+      #toggle_theme {
+        display: none !important;
+      }
+
+      /* Centered Floating Search HUD (Пошукова стрічка по середині, 70% прозорість, +15% збільшений розмір і шрифт) */
+      .navbar {
+        position: fixed !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) scale(1) !important;
+        width: 90% !important;
+        max-width: 1060px !important;
+        height: 110px !important;
+        min-height: 110px !important;
+        max-height: 110px !important;
+        padding: 12px 26px !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: center !important;
+        z-index: 1000 !important;
+        transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease !important;
+        background: rgba(13, 17, 23, 0.70) !important;
+        backdrop-filter: blur(20px) !important;
+        -webkit-backdrop-filter: blur(20px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        border-radius: 60px !important;
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75), 0 0 35px rgba(59, 130, 246, 0.20) !important;
+      }
+
+      .navbar-left {
+        display: none !important;
+      }
+
+      .navbar-center {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        height: 100% !important;
+      }
+
+      .navbar-right {
+        display: none !important;
+      }
+
+      .navbar .searchbar-inner,
+      .navbar form.pure-form {
+        width: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        height: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        position: relative !important;
+      }
+      .navbar form.pure-form fieldset {
+        flex: 1 1 auto !important;
+        height: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+      }
+      .navbar #searchbox {
+        width: 100% !important;
+        height: 88px !important;
+        background: transparent !important;
+        border: none !important;
+        outline: none !important;
+        box-shadow: none !important;
+        font-size: 2.65em !important; /* +20% збільшений шрифт */
+        font-weight: 500 !important;
+        color: #ffffff !important;
+        padding: 0 20px !important;
+      }
+      .navbar #searchbutton {
+        flex: 0 0 82px !important;
+        width: 82px !important;
+        height: 82px !important;
+        border-radius: 50% !important;
+        background: #2563eb !important;
+        border: none !important;
+        color: #ffffff !important;
+        font-size: 36px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        transition: background 0.15s ease, transform 0.15s ease !important;
+      }
+      .navbar #searchbutton:hover {
+        background: #3b82f6 !important;
+        transform: scale(1.08) !important;
+      }
+
+      .navbar-right a,
+      .navbar-right .pure-menu-heading,
+      .navbar-right div,
+      .navbar-right .pure-u-1-3,
+      .navbar-right .pure-u-1-4 {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: auto !important;
+        height: 100% !important;
+        line-height: 1 !important;
+        color: inherit !important;
+        text-decoration: none !important;
+      }
+
+      .navbar-right i.icon {
+        font-size: 19px !important;
+        line-height: 1 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+
+      /* Edge-to-Edge Layout */
+      .edge-to-edge-app {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+        box-sizing: border-box !important;
+      }
+
+      /* 1. Fullscreen Video Player */
+      .edge-player-section {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        background: #000000 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        z-index: 1 !important;
+      }
+      .edge-player-section iframe {
+        width: 100% !important;
+        height: 100% !important;
+        border: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border-radius: 0 !important;
+      }
+
+      /* 1. Top Cards Counter (Відео знайдено: X / Y) - Pinned at top of window */
+      .top-cards-counter {
+        position: fixed !important;
+        top: 22px !important;
+        left: 50% !important;
+        transform: translateX(-50%) scale(1) !important;
+        background: rgba(13, 17, 23, 0.72) !important;
+        backdrop-filter: blur(18px) !important;
+        -webkit-backdrop-filter: blur(18px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        border-radius: 30px !important;
+        padding: 8px 24px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 10px !important;
+        font-size: 1.25em !important;
+        box-sizing: border-box !important;
+        pointer-events: auto !important;
+        z-index: 501 !important;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65) !important;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95) !important;
+        transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease !important;
+      }
+      .cards-count-label {
+        opacity: 0.95 !important;
+        font-weight: 600 !important;
+        color: #f1f5f9 !important;
+        white-space: nowrap !important;
+      }
+      .cards-count-label b {
+        color: #60a5fa !important;
+        font-weight: 800 !important;
+      }
+
+      /* 2. Bottom Now Playing Bar (Лише пісня та автор з великим шрифтом) */
+      .bottom-now-playing-bar {
+        position: fixed !important;
+        bottom: 22px !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: 42px !important;
+        padding: 0 32px !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+        box-sizing: border-box !important;
+        pointer-events: auto !important;
+        z-index: 501 !important;
+        transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease !important;
+      }
+      .drum-playing-title {
+        color: #ffffff !important;
+        font-size: 1.6em !important;
+        font-weight: 600 !important;
+        max-width: 82vw !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+        text-shadow: 0 2px 16px rgba(0, 0, 0, 0.98), 0 0 32px rgba(0, 0, 0, 0.95) !important;
+        letter-spacing: 0.3px !important;
+      }
+
+      /* 3. Edge-to-Edge Floating Cards Drum (Centered in Middle of Screen) */
+      .edge-cards-bar {
+        position: fixed !important;
+        top: 50% !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: unset !important;
+        max-height: unset !important;
+        transform: translateY(-50%) scale(1) !important;
+        box-sizing: border-box !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        z-index: 500 !important;
+        transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease !important;
+        background: transparent !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        border: none !important;
+        box-shadow: none !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        pointer-events: none !important;
+      }
+
+      /* Independent Focus & Mutual Exclusion of Panels (Fade In/Out Without Sliding) */
+      #contents.autohide-all .navbar,
+      #contents.focus-bottom .navbar {
+        transform: translate(-50%, -50%) scale(0.96) !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+      }
+      #contents.autohide-all .edge-cards-bar,
+      #contents.focus-top .edge-cards-bar {
+        transform: translateY(-50%) scale(0.96) !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+      }
+      #contents.autohide-all .top-cards-counter,
+      #contents.focus-top .top-cards-counter {
+        transform: translate(-50%, -14px) scale(0.96) !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+      }
+      #contents.autohide-all .bottom-now-playing-bar,
+      #contents.focus-top .bottom-now-playing-bar {
+        transform: translateY(14px) scale(0.96) !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+      }
+
+      #contents.focus-top .navbar {
+        transform: translate(-50%, -50%) scale(1) !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+      }
+      #contents.focus-bottom .edge-cards-bar {
+        transform: translateY(-50%) scale(1) !important;
+        opacity: 1 !important;
+        pointer-events: none !important;
+      }
+      #contents.focus-bottom .top-cards-counter {
+        transform: translate(-50%, 0) scale(1) !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+      }
+      #contents.focus-bottom .bottom-now-playing-bar {
+        transform: translateY(0) scale(1) !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+      }
+
+      /* 3D Drum Carousel Stage (Барабан з карток по середині екрана) */
+      .cards-drum-stage {
+        width: 100% !important;
+        max-width: 98vw !important;
+        height: clamp(480px, 48vh, 680px) !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        position: relative !important;
+        perspective: 2000px !important;
+        perspective-origin: 50% 50% !important;
+        transform-style: preserve-3d !important;
+        margin: 0 auto !important;
+        overflow: visible !important;
+        user-select: none !important;
+        -webkit-user-select: none !important;
+        pointer-events: auto !important;
+      }
+
+      .cards-drum-stage,
+      .cards-drum-stage:focus,
+      .cards-drum-stage:focus-visible,
+      .cards-drum-stage:focus-within,
+      .drum-card-slot,
+      .drum-card-slot:focus,
+      .drum-card-slot:focus-visible {
+        outline: none !important;
+        border: none !important;
+        box-shadow: none !important;
+      }
+
+      /* Card Slot: 3D Animated Cover Flow Card (+30% larger) */
+      .drum-card-slot {
+        position: absolute !important;
+        width: clamp(570px, 38vw, 880px) !important;
+        height: clamp(350px, 43vh, 530px) !important;
+        cursor: pointer !important;
+        outline: none !important;
+        transform-style: preserve-3d !important;
+        transition: transform 0.48s cubic-bezier(0.16, 1, 0.3, 1), 
+                    opacity 0.38s ease, 
+                    filter 0.38s ease,
+                    visibility 0.38s ease !important;
+        will-change: transform, opacity !important;
+        pointer-events: auto !important;
+      }
+
+      .drum-card-slot .video-card-box {
+        width: 100% !important;
+        height: 100% !important;
+        border-radius: 18px !important;
+        padding: 2px !important; /* Рівно 2 пікселі відстань від контуру картки до картинки */
+        box-sizing: border-box !important;
+        display: block !important;
+        position: relative !important;
+        background: rgba(18, 22, 30, 0.85) !important;
+        backdrop-filter: blur(14px) !important;
+        -webkit-backdrop-filter: blur(14px) !important;
+        border: 1.5px solid rgba(255, 255, 255, 0.10) !important;
+        box-shadow: 0 20px 48px rgba(0, 0, 0, 0.80) !important;
+        outline: none !important;
+        overflow: hidden !important;
+        transition: border-color 0.25s ease, box-shadow 0.25s ease !important;
+      }
+
+      .drum-card-slot .thumbnail-container {
+        width: 100% !important;
+        height: 100% !important;
+        border-radius: 16px !important; /* Закруглені кути картинки */
+        overflow: hidden !important;
+        position: relative !important;
+        background: #000000 !important;
+      }
+
+      .drum-card-slot .thumbnail-img {
+        border-radius: 16px !important;
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        display: block !important;
+        filter: saturate(1.18) contrast(1.06) brightness(1.02) !important;
+        image-rendering: -webkit-optimize-contrast !important;
+        transition: filter 0.35s ease, transform 0.35s ease !important;
+      }
+
+      .drum-card-slot .thumbnail-duration {
+        position: absolute !important;
+        top: 10px !important;
+        right: 10px !important;
+        background-color: rgba(0, 0, 0, 0.85) !important;
+        color: #ffffff !important;
+        border-radius: 8px !important;
+        padding: 4px 10px !important;
+        font-size: 0.95em !important;
+        font-weight: 700 !important;
+        line-height: 1 !important;
+        letter-spacing: 0.5px !important;
+        z-index: 5 !important;
+        pointer-events: none !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.75) !important;
+      }
+
+      /* Назва відео поверх картинки як і час (БЕЗ ЖОДНИХ ЗНАЧКІВ 'ВИБРАНО' АБО 'ГРАЄ') */
+      .drum-card-slot .thumbnail-title-overlay {
+        position: absolute !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        padding: 38px 18px 14px 18px !important;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.72) 65%, transparent 100%) !important;
+        border-bottom-left-radius: 16px !important;
+        border-bottom-right-radius: 16px !important;
+        z-index: 4 !important;
+        pointer-events: none !important;
+        box-sizing: border-box !important;
+      }
+
+      .drum-card-slot .thumbnail-title-overlay p {
+        margin: 0 !important;
+        padding: 0 !important;
+        font-size: 1.10em !important;
+        font-weight: 700 !important;
+        line-height: 1.3 !important;
+        color: #ffffff !important;
+        text-shadow: 0 1px 5px rgba(0, 0, 0, 0.98) !important;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+      }
+
+      .drum-card-slot .thumbnail-meta-sub {
+        font-size: 0.88em !important;
+        opacity: 0.90 !important;
+        margin-top: 4px !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        color: #cbd5e1 !important;
+      }
+
+      /* Center Card: Slot 0 (Currently Playing / Center of Drum) */
+      .drum-card-slot.slot-center {
+        filter: brightness(1.10) saturate(1.22) !important;
+      }
+      .drum-card-slot.slot-center .video-card-box {
+        border: 2.5px solid #ef4444 !important;
+        box-shadow: 0 0 50px rgba(239, 68, 68, 0.85), 0 25px 60px rgba(0, 0, 0, 0.95) !important;
+      }
+      .drum-card-slot.slot-center .thumbnail-img {
+        filter: saturate(1.25) contrast(1.08) brightness(1.05) !important;
+      }
+
+      .drum-card-slot:hover {
+        opacity: 1 !important;
+        filter: brightness(1.15) saturate(1.20) !important;
+      }
+
+      /* Empty Favorite Card (Велика порожня картка для другого барабана) */
+      .drum-card-slot .empty-fav-card-box {
+        width: 100% !important;
+        height: 100% !important;
+        border-radius: 18px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: rgba(18, 22, 30, 0.88) !important;
+        backdrop-filter: blur(20px) !important;
+        -webkit-backdrop-filter: blur(20px) !important;
+        border: 2px dashed rgba(255, 255, 255, 0.25) !important;
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85) !important;
+        text-align: center !important;
+        padding: 30px !important;
+        box-sizing: border-box !important;
+        cursor: default !important;
+      }
+      .empty-fav-icon {
+        font-size: 3.8em !important;
+        margin-bottom: 16px !important;
+        filter: drop-shadow(0 0 20px rgba(234, 179, 8, 0.6)) !important;
+      }
+      .empty-fav-title {
+        font-size: 1.85em !important;
+        font-weight: 700 !important;
+        color: #f8fafc !important;
+        margin-bottom: 10px !important;
+        letter-spacing: 0.5px !important;
+      }
+      .empty-fav-sub {
+        font-size: 1.25em !important;
+        color: #94a3b8 !important;
+        max-width: 80% !important;
+        line-height: 1.4 !important;
+      }
+      .empty-fav-sub b {
+        color: #60a5fa !important;
+      }
+
+      /* Keyframe animations for icon vertical tumbler */
+      @keyframes iconFlyUpOut {
+        0% { transform: translateY(0); opacity: 1; }
+        100% { transform: translateY(-135%); opacity: 0; }
+      }
+      @keyframes iconFlyUpIn {
+        0% { transform: translateY(135%); opacity: 0; }
+        100% { transform: translateY(0); opacity: 1; }
+      }
+
+      /* Floating Bottom-Right Favorite Button (Прибрано за запитом користувача) */
+      .floating-fav-btn {
+        display: none !important;
+      }
+
+      /* Card Favorite Button (Прибрано за запитом користувача) */
+      .drum-card-slot .card-fav-btn {
+        display: none !important;
+      }
+
+      /* ========================================================== */
+      /* RESPONSIVE MULTI-DEVICE SUPPORT: MSI 40", 4K TV, TABLETS, PHONES */
+      /* ========================================================== */
+
+      /* A. MSI 40" / UltraWide (3440x1440, 5120x2160) / 4K / TV */
+      @media (min-width: 2560px), (min-height: 1400px) {
+        .navbar {
+          max-width: 1520px !important;
+          height: 152px !important;
+          min-height: 152px !important;
+          max-height: 152px !important;
+          border-radius: 76px !important;
+          padding: 16px 38px !important;
+        }
+        .navbar #searchbox {
+          font-size: 3.60em !important;
+          height: 126px !important;
+        }
+        .navbar #searchbutton {
+          flex: 0 0 108px !important;
+          width: 108px !important;
+          height: 108px !important;
+          font-size: 48px !important;
+        }
+        .top-cards-counter {
+          top: 36px !important;
+          font-size: 2.1em !important;
+          padding: 14px 42px !important;
+          border-radius: 44px !important;
+        }
+        .bottom-now-playing-bar {
+          bottom: 36px !important;
+        }
+        .drum-playing-title {
+          font-size: 2.6em !important;
+          max-width: 86vw !important;
+        }
+        .cards-drum-stage {
+          height: clamp(680px, 68vh, 990px) !important;
+          perspective: 3000px !important;
+        }
+        .drum-card-slot {
+          width: clamp(860px, 34.5vw, 1280px) !important;
+          height: clamp(520px, 47vh, 770px) !important;
+        }
+        .drum-card-slot .thumbnail-duration {
+          font-size: 1.50em !important;
+          padding: 8px 18px !important;
+          border-radius: 14px !important;
+          top: 22px !important;
+          right: 22px !important;
+        }
+        .drum-card-slot .thumbnail-title-overlay {
+          padding: 65px 32px 28px 32px !important;
+        }
+        .drum-card-slot .thumbnail-title-overlay p {
+          font-size: 2.10em !important;
+          line-height: 1.35 !important;
+        }
+        .drum-card-slot .thumbnail-meta-sub {
+          font-size: 1.55em !important;
+          margin-top: 10px !important;
+        }
+
+        .empty-fav-icon {
+          font-size: 5.0em !important;
+        }
+        .empty-fav-title {
+          font-size: 2.5em !important;
+        }
+        .empty-fav-sub {
+          font-size: 1.6em !important;
+        }
+      }
+
+      /* B. Tablets & Mid-size displays (768px - 1279px) */
+      @media (min-width: 768px) and (max-width: 1279px) {
+        .navbar {
+          max-width: 740px !important;
+          height: 82px !important;
+          min-height: 82px !important;
+          max-height: 82px !important;
+        }
+        .navbar #searchbox {
+          font-size: 1.90em !important;
+          height: 64px !important;
+        }
+        .navbar #searchbutton {
+          flex: 0 0 60px !important;
+          width: 60px !important;
+          height: 60px !important;
+          font-size: 28px !important;
+        }
+        .top-cards-counter {
+          top: 18px !important;
+          font-size: 1.2em !important;
+          padding: 7px 22px !important;
+        }
+        .bottom-now-playing-bar {
+          bottom: 18px !important;
+        }
+        .drum-playing-title {
+          font-size: 1.45em !important;
+        }
+        .cards-drum-stage {
+          height: clamp(280px, 38vh, 400px) !important;
+          perspective: 1400px !important;
+        }
+        .drum-card-slot {
+          width: clamp(340px, 40vw, 480px) !important;
+          height: clamp(210px, 26vh, 295px) !important;
+        }
+        .drum-card-slot .thumbnail-title-overlay p {
+          font-size: 1.05em !important;
+        }
+        .drum-card-slot .thumbnail-meta-sub {
+          font-size: 0.88em !important;
+        }
+      }
+
+      /* C. Phones / Mobile devices (< 768px) */
+      @media (max-width: 767px) {
+        .navbar {
+          width: 94vw !important;
+          max-width: 96vw !important;
+          height: 68px !important;
+          min-height: 68px !important;
+          max-height: 68px !important;
+          padding: 6px 14px !important;
+          border-radius: 36px !important;
+        }
+        .navbar #searchbox {
+          font-size: 1.45em !important;
+          height: 52px !important;
+          padding: 0 10px !important;
+        }
+        .navbar #searchbutton {
+          flex: 0 0 50px !important;
+          width: 50px !important;
+          height: 50px !important;
+          font-size: 22px !important;
+        }
+        .top-cards-counter {
+          top: 12px !important;
+          font-size: 0.95em !important;
+          padding: 5px 16px !important;
+          border-radius: 20px !important;
+        }
+        .bottom-now-playing-bar {
+          bottom: 44px !important;
+          padding: 0 12px !important;
+        }
+        .drum-playing-title {
+          font-size: 1.15em !important;
+          max-width: 95vw !important;
+        }
+        .cards-drum-stage {
+          height: clamp(240px, 36vh, 310px) !important;
+          perspective: 1100px !important;
+        }
+        .drum-card-slot {
+          width: clamp(280px, 82vw, 360px) !important;
+          height: clamp(175px, 28vh, 225px) !important;
+        }
+        .drum-card-slot .thumbnail-duration {
+          font-size: 0.82em !important;
+          padding: 3px 7px !important;
+          top: 6px !important;
+          right: 6px !important;
+        }
+
+        .drum-card-slot .thumbnail-title-overlay {
+          padding: 26px 12px 10px 12px !important;
+        }
+        .drum-card-slot .thumbnail-title-overlay p {
+          font-size: 0.92em !important;
+          -webkit-line-clamp: 1 !important;
+        }
+        .drum-card-slot .thumbnail-meta-sub {
+          display: none !important;
+        }
+      }
+
+      /* Floating Cinema UI Toggle Button */
+      .cinema-toggle-btn {
+        position: fixed !important;
+        top: 8px !important;
+        left: 12px !important;
+        right: auto !important;
+        z-index: 1000 !important;
+        padding: 5px 12px !important;
+        border-radius: 20px !important;
+        background: rgba(13, 17, 23, 0.85) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.25) !important;
+        color: #ffffff !important;
+        font-size: 13px !important;
+        font-weight: 600 !important;
+        cursor: pointer !important;
+        pointer-events: auto !important;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
+        transition: all 0.2s ease !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        user-select: none !important;
+      }
+      .cinema-toggle-btn:hover {
+        background: #2563eb !important;
+        border-color: #60a5fa !important;
+        transform: scale(1.05) !important;
+      }
+
+      /* Active Playing Card Style */
+      .video-card-box.now-playing {
+        border: 2.5px solid #ef4444 !important;
+        box-shadow: 0 0 0 2px #ef4444, 0 0 24px rgba(239, 68, 68, 0.85) !important;
+      }
+
+      /* Keyboard Cursor Navigation Focus States */
+      .video-card-wrapper:focus,
+      .video-card-wrapper.keyboard-focused .video-card-box {
+        outline: none !important;
+        border: 2.5px solid #38bdf8 !important;
+        box-shadow: 0 0 0 3px #38bdf8, 0 0 28px rgba(56, 189, 248, 0.95) !important;
+        transform: translateY(-4px) scale(1.04) !important;
+      }
+
+      .edge-sensor {
+        position: fixed !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 12px !important;
+        z-index: 450 !important;
+        background: transparent !important;
+        pointer-events: auto !important;
+      }
+      .edge-sensor.top {
+        top: 0 !important;
+      }
+      .edge-sensor.bottom {
+        bottom: 0 !important;
+      }
+
+      /* Cards Scroll Track - generous spacing between cards and scrollbar */
+      .edge-cards-scroll-track {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 172px !important;
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        gap: 12px !important;
+        overflow-x: scroll !important;
+        overflow-y: hidden !important;
+        padding: 4px 16px 16px 16px !important;
+        margin-bottom: 6px !important;
+        box-sizing: border-box !important;
+        cursor: grab !important;
+        user-select: none !important;
+        -webkit-user-select: none !important;
+        scrollbar-width: thin !important;
+        scrollbar-color: #3b82f6 rgba(255, 255, 255, 0.08) !important;
+        background: transparent !important;
+      }
+      .edge-cards-scroll-track.active-dragging {
+        cursor: grabbing !important;
+        cursor: -webkit-grabbing !important;
+      }
+      .edge-cards-scroll-track::-webkit-scrollbar {
+        height: 6px !important;
+        background: transparent !important;
+      }
+      .edge-cards-scroll-track::-webkit-scrollbar-track,
+      .edge-cards-scroll-track::-webkit-scrollbar-track-piece {
+        background: rgba(255, 255, 255, 0.08) !important;
+        border-radius: 3px !important;
+      }
+      .dark-theme .edge-cards-scroll-track::-webkit-scrollbar-track,
+      .dark-theme .edge-cards-scroll-track::-webkit-scrollbar-track-piece {
+        background: rgba(255, 255, 255, 0.08) !important;
+      }
+      .edge-cards-scroll-track::-webkit-scrollbar-thumb {
+        background: #3b82f6 !important;
+        border-radius: 3px !important;
+      }
+      .edge-cards-scroll-track > .video-card-wrapper {
+        flex: 0 0 210px !important;
+        width: 210px !important;
+        min-width: 210px !important;
+        max-width: 210px !important;
+        height: 142px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-sizing: border-box !important;
+        transition: transform 0.15s ease !important;
+      }
+      .edge-cards-scroll-track .video-card-box {
+        width: 100% !important;
+        height: 100% !important;
+        padding: 4px !important;
+        border-radius: 8px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+        gap: 2px !important;
+        position: relative !important;
+      }
+      .edge-cards-scroll-track .thumbnail {
+        margin-bottom: 2px !important;
+        border-radius: 6px !important;
+      }
+      .edge-cards-scroll-track .thumbnail img {
+        border-radius: 6px !important;
+        aspect-ratio: 16/9 !important;
+        height: 85px !important;
+        object-fit: cover !important;
+      }
+      .edge-cards-scroll-track .video-title-row {
+        height: 2.4em !important;
+        min-height: 2.4em !important;
+        max-height: 2.4em !important;
+        margin: 1px 0 !important;
+      }
+      .edge-cards-scroll-track .video-title-row p {
+        font-size: 0.74em !important;
+        line-height: 1.2 !important;
+      }
+      .edge-cards-scroll-track .video-meta-row {
+        margin: 0 !important;
+        font-size: 0.7em !important;
+        min-height: 1.2em !important;
+      }
+      .edge-nav-arrow {
+        display: none !important;
+      }
+      .edge-nav-arrow.prev {
+        left: 8px !important;
+      }
+      .edge-nav-arrow.next {
+        right: 8px !important;
+      }
+      .video-card-box.now-playing {
+        border-color: #ef4444 !important;
+        box-shadow: 0 0 0 2px #ef4444, 0 8px 24px rgba(239, 68, 68, 0.25) !important;
+      }
+    </style>
     <script src="/js/_helpers.js?v=<%= ASSET_COMMIT %>"></script>
 </head>
 
 <body class="<%= dark_mode.blank? ? "no" : dark_mode %>-theme">
     <span style="display:none" id="dark_mode_pref"><%= dark_mode %></span>
     <div class="pure-g">
-        <div class="pure-u-1 pure-u-xl-20-24" id="contents">
-            <div class="pure-g navbar h-box">
+        <div class="pure-u-1" id="contents">
+            <div class="edge-sensor top" id="edge-sensor-top"></div>
+            <div class="edge-sensor bottom" id="edge-sensor-bottom"></div>
+            <div class="navbar h-box">
+                <div class="navbar-left"></div>
                 <% if navbar_search %>
-                    <div class="pure-u-1 pure-u-md-4-24">
-                        <a href="/" class="index-link pure-menu-heading">Invidious</a>
-                    </div>
-                    <div class="pure-u-1 pure-u-md-12-24 searchbar">
-                        <% autofocus = false %><%= rendered "components/search_box" %>
+                    <div class="navbar-center searchbar">
+                        <div class="searchbar-inner">
+                            <% autofocus = false %><%= rendered "components/search_box" %>
+                        </div>
                     </div>
                 <% end %>
 
-                <div class="pure-u-1 pure-u-md-8-24 user-field">
-                    <% if env.get? "user" %>
-                        <div class="pure-u-1-4">
-                            <a id="toggle_theme" href="/toggle_theme?referer=<%= env.get?("current_page") %>" class="pure-menu-heading" title="<%= I18n.translate(locale, "toggle_theme") %>">
-                                <% if dark_mode == "dark" %>
-                                    <i class="icon ion-ios-sunny"></i>
-                                <% else %>
-                                    <i class="icon ion-ios-moon"></i>
-                                <% end %>
-                            </a>
-                        </div>
-                        <div class="pure-u-1-4">
-                            <a id="notification_ticker" title="<%= I18n.translate(locale, "Subscriptions") %>" href="/feed/subscriptions" class="pure-menu-heading">
-                                <% notification_count = env.get("user").as(Invidious::User).notifications.size %>
-                                <% if CONFIG.enable_user_notifications && notification_count > 0 %>
-                                    <span id="notification_count"><%= notification_count %></span> <i class="icon ion-ios-notifications"></i>
-                                <% else %>
-                                    <i class="icon ion-ios-notifications-outline"></i>
-                                <% end %>
-                            </a>
-                        </div>
-                        <div class="pure-u-1-4">
-                            <a title="<%= I18n.translate(locale, "Preferences") %>" href="/preferences?referer=<%= env.get?("current_page") %>" class="pure-menu-heading">
-                                <i class="icon ion-ios-cog"></i>
-                            </a>
-                        </div>
-                        <% if env.get("preferences").as(Preferences).show_nick %>
-                            <div class="pure-u-1-4" style="overflow: hidden; white-space: nowrap;">
-                                <span id="user_name"><%= HTML.escape(env.get("user").as(Invidious::User).email) %></span>
-                            </div>
-                        <% end %>
-                        <div class="pure-u-1-4">
-                            <form action="/signout?referer=<%= env.get?("current_page") %>" method="post">
-                                <input type="hidden" name="csrf_token" value="<%= HTML.escape(env.get?("csrf_token").try &.as(String) || "") %>">
-                                <a class="pure-menu-heading" href="#">
-                                    <input style="all:unset" type="submit" value="<%= I18n.translate(locale, "Log out") %>">
-                                </a>
-                            </form>
-                        </div>
-                    <% else %>
-                        <div class="pure-u-1-3">
-                            <a id="toggle_theme" href="/toggle_theme?referer=<%= env.get?("current_page") %>" class="pure-menu-heading" title="<%= I18n.translate(locale, "toggle_theme") %>">
-                                <% if dark_mode == "dark" %>
-                                    <i class="icon ion-ios-sunny"></i>
-                                <% else %>
-                                    <i class="icon ion-ios-moon"></i>
-                                <% end %>
-                            </a>
-                        </div>
-                        <div class="pure-u-1-3">
-                            <a title="<%= I18n.translate(locale, "Preferences") %>" href="/preferences?referer=<%= env.get?("current_page") %>" class="pure-menu-heading">
-                                <i class="icon ion-ios-cog"></i>
-                            </a>
-                        </div>
-                        <% if CONFIG.login_enabled %>
-                            <div class="pure-u-1-3">
-                                <a href="/login?referer=<%= env.get?("current_page") %>" class="pure-menu-heading">
-                                    <%= I18n.translate(locale, "Log in") %>
-                                </a>
-                            </div>
-                        <% end %>
-                    <% end %>
-                </div>
+                <div class="navbar-right user-field"></div>
             </div>
 
             <% if CONFIG.banner %>
@@ -113,69 +1060,13 @@
 
             <%= content %>
 
-            <footer>
-                <div class="pure-g">
-                    <div class="pure-u-1 pure-u-md-1-3">
-                        <span>
-                            <i class="icon ion-logo-github"></i>
-                        <% if CONFIG.modified_source_code_url %>
-                            <a href="https://github.com/iv-org/invidious"><%= I18n.translate(locale, "footer_original_source_code") %></a>&nbsp;/
-                            <a href="<%= CONFIG.modified_source_code_url %>"><%= I18n.translate(locale, "footer_modfied_source_code") %></a>
-                        <% else %>
-                            <a href="https://github.com/iv-org/invidious"><%= I18n.translate(locale, "footer_source_code") %></a>
-                        <% end %>
-                        </span>
-                        <span>
-                            <i class="icon ion-ios-paper"></i>
-                            <a href="https://github.com/iv-org/documentation"><%= I18n.translate(locale, "footer_documentation") %></a>
-                        </span>
-                    </div>
-
-                    <div class="pure-u-1 pure-u-md-1-3">
-                        <span>
-                            <a href="https://github.com/iv-org/invidious/blob/master/LICENSE"><%= I18n.translate(locale, "Released under the AGPLv3 on Github.") %></a>
-                        </span>
-                        <span>
-                            <i class="icon ion-logo-javascript"></i>
-                            <a rel="jslicense" href="/licenses"><%= I18n.translate(locale, "View JavaScript license information.") %></a>
-                        </span>
-                        <span>
-                            <i class="icon ion-ios-paper"></i>
-                            <a href="/privacy"><%= I18n.translate(locale, "View privacy policy.") %></a>
-                        </span>
-                    </div>
-
-                    <div class="pure-u-1 pure-u-md-1-3">
-                        <span>
-                            <i class="icon ion-ios-wallet"></i>
-                            <a href="https://invidious.io/donate/"><%= I18n.translate(locale, "footer_donate_page") %></a>
-                        </span>
-                        <span>
-                            <%= I18n.translate(locale, "Current version: ") %>
-                            <% if CONFIG.modified_source_code_url %>
-                                <a href="<%= CONFIG.modified_source_code_url %>/commit/<%= CURRENT_COMMIT %>"><%= CURRENT_VERSION %>-<%= CURRENT_COMMIT %></a>
-                            <% else %>
-                                <a href="https://github.com/iv-org/invidious/commit/<%= CURRENT_COMMIT %>"><%= CURRENT_VERSION %>-<%= CURRENT_COMMIT %></a>
-                            <% end %>
-                            @ <%= CURRENT_BRANCH %>
-                            <% if CURRENT_TAG != "" %>
-                            (
-                                <% if CONFIG.modified_source_code_url %>
-                                    <a href="<%= CONFIG.modified_source_code_url %>/releases/tag/<%= CURRENT_TAG %>"><%= CURRENT_TAG %></a>
-                                <% else %>
-                                    <a href="https://github.com/iv-org/invidious/releases/tag/<%= CURRENT_TAG %>"><%= CURRENT_TAG %></a>
-                                <% end %>
-                            )
-                            <% end %>
-                        </span>
-                    </div>
-                </div>
-                <% if CONFIG.footer %>
+            <% if CONFIG.footer %>
+                <footer>
                     <div class="h-box v-box" id="footer-info">
                         <%= CONFIG.footer %>
                     </div>
-                <% end %>
-            </footer>
+                </footer>
+            <% end %>
 
         </div>
     </div>
