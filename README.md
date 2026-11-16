@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="screenshots/03_coverflow_drum.png" width="100%" alt="Dushin Invidious 3D Cover Flow Cinema">
+  <img src="assets/dushin_logo.jpg" width="220" height="220" alt="Dushin Invidious Logo" style="border-radius: 28px; box-shadow: 0 10px 30px rgba(0,0,0,0.6);">
   <h1>Dushin Invidious</h1>
   <p><b>Альтернативний клієнт із відкритим вихідним кодом для YouTube з 3D Cover Flow та режимом кінотеатру</b></p>
 
